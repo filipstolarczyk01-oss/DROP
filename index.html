@@ -3,86 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DROP — przeceny w luksusowym outerwearze</title>
-<meta name="description" content="Agregator prawdziwych przecen: Stone Island, Moncler, C.P. Company, Canada Goose, Arc'teryx. Największe spadki cen w jednym miejscu.">
+<title>DROP — kuratorowane przeceny mody luksusowej</title>
+<meta name="description" content="Najlepsze przeceny Stone Island, Moncler, C.P. Company i innych marek premium. Kolekcja lato i okrycia wierzchnie w jednym miejscu.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Archivo:wght@400;500;600&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@300;400;500&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F7F6F2; --ink: #111; --muted: #555; --faint: #999;
-    --line: #E3E0D8; --accent: #8B1E24; --card-line: #E9E6DE;
-    --serif: 'Bodoni Moda', serif; --sans: 'Archivo', sans-serif; --mono: 'Space Grotesk', monospace;
+    --ink: #14100D; --bg: #FBFAF7; --paper: #FFFFFF;
+    --muted: #6B6459; --faint: #A39C90; --line: #E6E1D8;
+    --accent: #6E1F24; --gold: #A98C50;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', system-ui, sans-serif;
+    --mono: 'Space Grotesk', monospace;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink); }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: var(--sans); font-weight: 300; background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; padding-bottom: 76px; }
   a { color: inherit; }
 
-  /* Ticker */
-  .ticker { background: #111; color: var(--bg); overflow: hidden; padding: 8px 0; font-family: var(--mono); font-size: 12px; }
-  .marquee { display: inline-flex; white-space: nowrap; animation: scroll 32s linear infinite; }
+  /* Pasek przecen */
+  .ticker { background: var(--ink); color: #EDE7DC; overflow: hidden; padding: 9px 0; font-family: var(--mono); font-size: 11px; }
+  .marquee { display: inline-flex; white-space: nowrap; animation: scroll 42s linear infinite; }
   @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
-  .tick-item { margin: 0 8px; letter-spacing: .5px; }
-  .tick-pct { color: #E8B4B8; font-weight: 500; margin-right: 6px; }
-  .tick-dot { margin-left: 16px; font-size: 7px; vertical-align: middle; color: var(--accent); }
+  .tick-item { margin: 0 10px; letter-spacing: 1px; }
+  .tick-pct { color: var(--gold); margin-right: 7px; }
+  .tick-dot { margin-left: 18px; font-size: 6px; vertical-align: middle; color: var(--accent); }
 
-  /* Header */
-  header { display: flex; align-items: center; gap: 20px; padding: 18px 28px; border-bottom: 1px solid var(--line); flex-wrap: wrap; background: var(--bg); position: sticky; top: 0; z-index: 20; }
-  .logo { font-family: var(--serif); font-size: 28px; font-weight: 600; letter-spacing: 2px; }
-  .logo span { color: var(--accent); }
-  nav { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
-  nav button { background: none; border: none; padding: 8px 12px; font-size: 13px; cursor: pointer; color: var(--muted); font-family: inherit; letter-spacing: .3px; }
-  nav button.on { color: var(--ink); border-bottom: 2px solid var(--accent); }
-  .live { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; color: var(--accent); }
+  /* Nagłówek */
+  header { background: var(--bg); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 30; }
+  .head-top { display: flex; align-items: center; justify-content: space-between; padding: 20px 22px 14px; }
+  .logo { font-family: var(--serif); font-size: 30px; font-weight: 400; letter-spacing: 7px; text-indent: 7px; }
+  .logo i { font-style: normal; color: var(--accent); font-size: 22px; letter-spacing: 0; }
+  .live { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; color: var(--faint); }
+  .live b { color: var(--accent); font-weight: 400; }
+  nav { display: flex; gap: 22px; overflow-x: auto; padding: 0 22px 12px; scrollbar-width: none; }
+  nav::-webkit-scrollbar { display: none; }
+  nav button { background: none; border: none; padding: 4px 0; font-size: 12px; cursor: pointer; color: var(--muted);
+    font-family: var(--sans); font-weight: 300; letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; border-bottom: 1px solid transparent; }
+  nav button.on { color: var(--ink); border-bottom-color: var(--accent); }
 
   /* Hero */
-  .hero { padding: 56px 28px 32px; max-width: 900px; }
-  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin: 0 0 16px; }
-  h1 { font-family: var(--serif); font-size: clamp(34px, 6vw, 60px); line-height: 1.08; margin: 0; font-weight: 600; }
-  h1 em { font-weight: 400; }
-  .hero p.sub { font-size: 15px; color: var(--muted); max-width: 620px; line-height: 1.6; margin-top: 18px; }
+  .hero { padding: 64px 22px 44px; text-align: center; }
+  .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold); margin: 0 0 22px; }
+  h1 { font-family: var(--serif); font-size: clamp(40px, 12vw, 76px); line-height: 1.02; margin: 0; font-weight: 300; letter-spacing: -0.5px; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .hero p { font-size: 14px; color: var(--muted); max-width: 440px; margin: 22px auto 0; line-height: 1.75; letter-spacing: .2px; }
+  .rule { width: 44px; height: 1px; background: var(--gold); margin: 30px auto 0; }
 
   /* Filtry */
-  .filters { display: flex; gap: 24px; align-items: center; padding: 10px 28px 20px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
-  .fgroup { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .flabel { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--faint); margin-right: 4px; }
-  .chip { background: #fff; border: 1px solid #DDD9CF; padding: 7px 14px; font-size: 13px; cursor: pointer; font-family: inherit; border-radius: 999px; }
-  .chip.on { background: #111; color: #fff; border-color: #111; }
-  select { padding: 8px 12px; font-size: 13px; border: 1px solid #DDD9CF; background: #fff; font-family: inherit; }
-  .push { margin-left: auto; }
+  .filters { display: flex; gap: 8px; align-items: center; padding: 4px 22px 20px; flex-wrap: wrap; justify-content: center; }
+  .chip { background: transparent; border: 1px solid var(--line); padding: 8px 16px; font-size: 11px; cursor: pointer;
+    font-family: var(--sans); font-weight: 300; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); border-radius: 0; }
+  .chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  select { padding: 8px 10px; font-size: 11px; border: 1px solid var(--line); background: transparent; font-family: var(--sans);
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); border-radius: 0; }
+  .search-wrap { padding: 4px 22px 16px; max-width: 520px; margin: 0 auto; }
+  #q { width: 100%; padding: 13px 16px; font-family: var(--sans); font-weight: 300; font-size: 13px;
+    letter-spacing: 1px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 0; }
+  #q::placeholder { color: var(--faint); letter-spacing: 1px; }
+  #brandBar { padding-bottom: 12px; }
+  .more { background: transparent; border: 1px solid var(--ink); color: var(--ink); padding: 15px 40px;
+    font-family: var(--sans); font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; }
+  .count { text-align: center; font-family: var(--mono); font-size: 10px; letter-spacing: 2px; color: var(--faint); padding-bottom: 8px; }
 
-  /* Grid */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px; padding: 32px 28px; max-width: 1400px; margin: 0 auto; }
-  .empty { grid-column: 1 / -1; padding: 60px; text-align: center; color: #777; font-size: 14px; }
-  .card { background: #fff; border: 1px solid var(--card-line); cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
-  .card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.12); }
-  .thumb { position: relative; aspect-ratio: 3 / 4; display: flex; align-items: center; justify-content: center; overflow: hidden; background: linear-gradient(170deg, #EFEBE2, #E2DCCE); }
+  /* Siatka */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1px; background: var(--line);
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr 1fr; } }
+  .empty { grid-column: 1 / -1; padding: 70px 20px; text-align: center; color: var(--faint); font-size: 13px; background: var(--bg); letter-spacing: 1px; }
+  .card { background: var(--paper); cursor: pointer; position: relative; transition: background .25s; }
+  .card:hover { background: #FCFBF8; }
+  .thumb { position: relative; aspect-ratio: 3 / 4; display: flex; align-items: center; justify-content: center;
+    overflow: hidden; background: linear-gradient(168deg, #F4F0E8, #E8E2D6); }
   .thumb img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
-  .badge { position: absolute; top: 12px; left: 12px; background: var(--accent); color: #fff; font-family: var(--mono); font-size: 13px; padding: 4px 9px; z-index: 2; }
-  .hot { position: absolute; bottom: 12px; left: 12px; background: var(--accent); color: #fff; font-family: var(--mono); font-size: 10px; letter-spacing: 2px; padding: 3px 8px; z-index: 2; }
-  .body { padding: 14px 16px 16px; }
-  .brand { font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--faint); font-family: var(--mono); }
-  .name { font-family: var(--serif); font-size: 16px; margin: 4px 0 2px; line-height: 1.25; }
-  .color { font-size: 12px; color: var(--faint); margin-bottom: 8px; }
-  .prices { display: flex; align-items: baseline; gap: 10px; }
-  .pnew { font-family: var(--mono); font-size: 16px; font-weight: 500; }
-  .pold { font-family: var(--mono); font-size: 13px; color: #B0AA9C; text-decoration: line-through; }
-  .store { font-size: 11px; color: var(--faint); margin-top: 8px; }
+  .badge { position: absolute; top: 0; left: 0; background: var(--accent); color: #fff; font-family: var(--mono);
+    font-size: 10px; letter-spacing: 1px; padding: 5px 9px; z-index: 3; }
+  .tag { position: absolute; top: 10px; right: 10px; font-family: var(--mono); font-size: 8px; letter-spacing: 2px;
+    padding: 4px 7px; z-index: 3; background: rgba(255,255,255,.92); color: var(--ink); }
+  .body { padding: 16px 14px 18px; }
+  .brand { font-family: var(--mono); font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--faint); }
+  .name { font-family: var(--serif); font-size: 17px; margin: 7px 0 3px; line-height: 1.2; font-weight: 400; }
+  .color { font-size: 11px; color: var(--faint); letter-spacing: .5px; margin-bottom: 11px; }
+  .prices { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; }
+  .pnew { font-family: var(--mono); font-size: 14px; }
+  .pold { font-family: var(--mono); font-size: 11px; color: var(--faint); text-decoration: line-through; }
+  .store { font-size: 10px; color: var(--faint); margin-top: 9px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .add { position: absolute; bottom: 14px; right: 12px; width: 32px; height: 32px; border: 1px solid var(--line);
+    background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1; cursor: pointer; z-index: 4; font-family: var(--sans); }
+  .add.in { background: var(--ink); color: #fff; border-color: var(--ink); }
 
-  /* Modal */
-  .overlay { position: fixed; inset: 0; background: rgba(15,14,12,.55); z-index: 50; display: none; align-items: center; justify-content: center; padding: 20px; }
-  .overlay.open { display: flex; }
-  .modal { background: var(--bg); max-width: 780px; width: 100%; display: grid; grid-template-columns: minmax(240px, 1fr) 1.2fr; max-height: 90vh; overflow: auto; }
-  @media (max-width: 640px) { .modal { grid-template-columns: 1fr; } }
-  .modal .thumb { min-height: 340px; aspect-ratio: auto; }
-  .mbody { padding: 32px 28px; }
-  .mname { font-family: var(--serif); font-size: 28px; margin: 6px 0 2px; font-weight: 600; line-height: 1.15; }
-  .save { font-size: 13px; color: var(--accent); margin: 6px 0 20px; }
-  .cta { display: block; width: 100%; background: var(--accent); color: #fff; border: none; padding: 15px 0; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; font-family: inherit; text-align: center; text-decoration: none; }
-  .ghost { display: block; width: 100%; background: none; border: none; padding: 12px 0 0; font-size: 13px; color: #777; cursor: pointer; text-decoration: underline; font-family: inherit; }
+  /* Pasek selekcji */
+  .bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--ink); color: #EDE7DC; z-index: 40;
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; transform: translateY(105%); transition: transform .3s ease; }
+  .bar.show { transform: translateY(0); }
+  .bar-l { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; line-height: 1.5; }
+  .bar-l b { color: var(--gold); font-weight: 400; }
+  .bar button { background: #EDE7DC; color: var(--ink); border: none; padding: 12px 20px; font-family: var(--sans);
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; }
 
-  footer { padding: 40px 28px 60px; font-size: 12px; color: var(--faint); text-align: center; border-top: 1px solid var(--line); margin-top: 20px; line-height: 1.6; max-width: 700px; margin-left: auto; margin-right: auto; }
-  button:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* Nakładka / panel */
+  .overlay { position: fixed; inset: 0; background: rgba(20,16,13,.6); z-index: 60; display: none; }
+  .overlay.open { display: block; }
+  .sheet { position: absolute; bottom: 0; left: 0; right: 0; background: var(--bg); max-height: 92vh; overflow-y: auto; padding: 26px 22px 40px; }
+  .sheet-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .sheet-head h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; margin: 0; }
+  .close { background: none; border: none; font-size: 12px; color: var(--muted); text-decoration: underline; cursor: pointer; font-family: var(--sans); }
+
+  /* Karta produktu */
+  .p-img { aspect-ratio: 4/5; max-height: 300px; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(168deg, #F4F0E8, #E8E2D6); position: relative; overflow: hidden; margin-bottom: 20px; }
+  .p-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .save { font-size: 12px; color: var(--accent); margin: 10px 0 22px; letter-spacing: .5px; }
+  .cta { display: block; width: 100%; background: var(--accent); color: #fff; border: none; padding: 17px 0; font-size: 11px;
+    letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; font-family: var(--sans); text-align: center; text-decoration: none; }
+  .cta.dark { background: var(--ink); }
+  .cta.outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); margin-top: 10px; }
+
+  /* Lista selekcji */
+  .row { display: flex; gap: 14px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .row-th { width: 54px; height: 68px; flex-shrink: 0; background: linear-gradient(168deg, #F4F0E8, #E8E2D6);
+    display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+  .row-th img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .row-x { background: none; border: none; font-size: 10px; color: var(--muted); text-decoration: underline; cursor: pointer; padding: 4px 0 0; font-family: var(--sans); }
+  .totals { display: flex; justify-content: space-between; padding: 20px 0 4px; font-size: 15px; }
+  .totals b { font-family: var(--mono); font-weight: 500; }
+  .saved { font-size: 12px; color: var(--accent); margin-bottom: 20px; }
+  .store-group { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--faint); padding-top: 18px; }
+
+  footer { padding: 50px 26px 46px; font-size: 11px; color: var(--faint); text-align: center; line-height: 1.9;
+    max-width: 620px; margin: 0 auto; letter-spacing: .3px; }
+  footer .fl { font-family: var(--serif); font-size: 22px; letter-spacing: 6px; color: var(--ink); display: block; margin-bottom: 16px; }
+  .toast { position: fixed; bottom: 92px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #EDE7DC;
+    padding: 11px 20px; font-size: 11px; letter-spacing: 1px; z-index: 100; max-width: 88vw; text-align: center; }
+  button:focus-visible, select:focus-visible, a:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
 </style>
 </head>
 <body>
@@ -90,179 +146,299 @@
 <div class="ticker"><div class="marquee" id="ticker"></div></div>
 
 <header>
-  <div class="logo">DROP<span>↓</span></div>
+  <div class="head-top">
+    <div class="logo">DROP<i>↓</i></div>
+    <div class="live"><b>●</b> AKTUALIZACJA DZIŚ</div>
+  </div>
   <nav id="catNav"></nav>
-  <div class="live">● LIVE</div>
 </header>
 
 <section class="hero">
-  <p class="eyebrow">Agregator przecen · Moda premium i luksusowa</p>
-  <h1>Realne <em>spadki cen</em><br>w luksusowym outerwearze.</h1>
-  <p class="sub">Stone Island, Moncler, C.P. Company i inne marki premium — aktualne przeceny z zaufanych sklepów w jednym miejscu. Klikasz, kupujesz bezpośrednio w sklepie.</p>
+  <p class="eyebrow">Kuratorowana selekcja przecen</p>
+  <h1>Luksus<br><em>w cenie okazji</em></h1>
+  <p>Ręcznie wybrane przeceny z najlepszych sklepów świata. Kolekcja letnia i okrycia wierzchnie — w jednym miejscu, bez przeszukiwania dziesiątek stron.</p>
+  <div class="rule"></div>
 </section>
 
-<div class="filters">
-  <div class="fgroup" id="pctFilters"><span class="flabel">Min. przecena</span></div>
-  <div class="fgroup push">
-    <select id="sortSel">
-      <option value="drop">Największa przecena</option>
-      <option value="asc">Cena: od najniższej</option>
-      <option value="desc">Cena: od najwyższej</option>
-    </select>
-  </div>
+<div class="search-wrap">
+  <input id="q" type="search" placeholder="Szukaj marki lub modelu..." autocomplete="off">
 </div>
+<div class="filters" id="brandBar"></div>
+<div class="filters">
+  <button class="chip" data-s="lato">Lato</button>
+  <button class="chip" data-s="zima">Okrycia</button>
+  <button class="chip" data-p="30">−30% i więcej</button>
+  <button class="chip" data-p="40">−40% i więcej</button>
+  <select id="sortSel">
+    <option value="drop">Największa przecena</option>
+    <option value="asc">Cena rosnąco</option>
+    <option value="desc">Cena malejąco</option>
+  </select>
+</div>
+<div class="count" id="count"></div>
 
 <main class="grid" id="grid"></main>
+<div id="moreWrap" style="text-align:center;padding:34px 22px 10px"></div>
 
 <footer>
-  DROP — agregator przecen. Ceny pochodzą ze sklepów partnerskich i mogą się zmienić.
-  Linki mogą być linkami afiliacyjnymi — kupując przez nie, wspierasz rozwój serwisu bez dodatkowych kosztów.
-  Ceny zagraniczne przeliczane na złotówki po kursie orientacyjnym — w sklepie zapłacisz w walucie oryginalnej.
-  Płatność zawsze w sklepie docelowym.
+  <span class="fl">DROP</span>
+  Kuratorowany przegląd przecen mody luksusowej. Ceny pochodzą ze sklepów partnerskich i mogą ulec zmianie —
+  wiążąca jest zawsze cena w sklepie. Kwoty zagraniczne przeliczane na złotówki po kursie orientacyjnym.
+  Serwis zawiera linki afiliacyjne: kupując przez nie, wspierasz rozwój DROP bez dodatkowych kosztów.
 </footer>
 
-<div class="overlay" id="overlay">
-  <div class="modal" id="modal"></div>
+<div class="bar" id="bar">
+  <div class="bar-l" id="barText"></div>
+  <button id="barBtn">Zobacz selekcję</button>
 </div>
+
+<div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
 
 <script src="products.js"></script>
 <script>
 (function () {
-  // ——— KURSY WALUT ———
-  // Ceny z zagranicznych sklepów są automatycznie przeliczane na złotówki.
-  // Kursy aktualizuj co jakiś czas (sprawdź w Google "kurs dolara").
+  // ——— KURSY WALUT (aktualizuj co jakiś czas) ———
   const KURS = { USD: 3.75, EUR: 4.25, GBP: 5.05, PLN: 1 };
-  const naPLN = (n, c) => Math.round(n * (KURS[c] || 1));
-  const price = (n, c) => naPLN(n, c).toLocaleString("pl-PL") + " zł";
+  const zl = (n, c) => Math.round(n * (KURS[c] || 1));
+  const price = (n, c) => zl(n, c).toLocaleString("pl-PL") + " zł";
   const pct = p => Math.round((1 - p.price / p.oldPrice) * 100);
   const esc = s => String(s || "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 
-  // placeholder SVG w kolorze neutralnym, gdy brak zdjęcia lub zdjęcie nie wczyta się
-  // Ilustracja ubrania rysowana automatycznie, gdy produkt nie ma zdjęcia.
-  // Po wgraniu feedu z Awin zdjęcia zastąpią ilustracje same z siebie.
-  const HUE = { "Kurtki": "#2b3a52", "Kurtki puchowe": "#1b2a47", "Parki": "#7a6a4e",
-                "Kamizelki": "#2a3040", "Overshirty": "#3a5a8c", "Bluzy": "#2f6bb5",
-                "Koszule": "#4a6a8a", "Spodnie": "#43506b" };
+  // ——— Ilustracja, gdy produkt nie ma jeszcze zdjęcia ———
+  const HUE = { "Kurtki": "#2E3A4E", "Kurtki puchowe": "#1F2C45", "Parki": "#7A6A4E", "Kamizelki": "#2A3040",
+    "Overshirty": "#3E5C82", "Bluzy": "#37628F", "Koszule": "#4A6A8A", "Spodnie": "#454F63",
+    "Polo": "#8C8574", "T-shirty": "#9A8F7A", "Kąpielówki": "#5B7C8C", "Buty": "#8A8172", "Swetry": "#9C9484" };
   const shade = (hex, f) => { const n = parseInt(hex.slice(1), 16);
     const c = v => Math.max(0, Math.min(255, Math.round(v * f)));
-    return `rgb(${c(n >> 16)},${c((n >> 8) & 255)},${c(n & 255)})`; };
+    return "rgb(" + c(n >> 16) + "," + c((n >> 8) & 255) + "," + c(n & 255) + ")"; };
 
-  const placeholder = p => {
-    const hue = p.hue || HUE[p.cat] || "#3a4256";
-    const line = shade(hue, 0.55), lite = shade(hue, 1.3);
-    const cat = (p.cat || "").toLowerCase();
-    const kaptur = /puch|park|bluz|hood/.test(cat);
-    const dlugi = /park|overshirt/.test(cat);
-    const kamizelka = /kamizel|vest/.test(cat);
-    const pik = /puch|kamizel/.test(cat);
-    const dol = dlugi ? 268 : 248;
-    return `<svg viewBox="0 0 240 300" width="72%" style="position:relative;z-index:1" aria-hidden="true">
-      <path d="M120 10 L120 26" stroke="#8a8577" stroke-width="3"/>
-      <circle cx="120" cy="8" r="5" stroke="#8a8577" stroke-width="3" fill="none"/>
-      ${kaptur
-        ? `<path d="M85 52 Q88 24 120 22 Q152 24 155 52 Q140 44 120 44 Q100 44 85 52 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>`
+  function illo(p) {
+    const hue = HUE[p.cat] || "#3A4256", line = shade(hue, .55), lite = shade(hue, 1.28);
+    const c = (p.cat || "").toLowerCase();
+    if (/but|sneaker/.test(c)) return `<svg viewBox="0 0 240 200" width="76%" style="position:relative;z-index:1">
+      <path d="M28 148 Q30 118 52 112 Q74 106 92 118 Q112 132 142 136 Q186 142 198 152 Q206 160 200 168 L36 168 Q26 164 28 148 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
+      <path d="M28 160 L202 160 Q208 168 200 172 L34 172 Q26 168 28 160 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>
+      <path d="M56 116 Q70 126 78 140 M72 112 Q86 122 94 136 M88 116 Q100 126 108 138" stroke="${line}" stroke-width="2" fill="none"/>
+      <circle cx="168" cy="146" r="7" fill="${lite}" stroke="${line}" stroke-width="2"/></svg>`;
+    if (/kąpiel|short/.test(c)) return `<svg viewBox="0 0 240 240" width="66%" style="position:relative;z-index:1">
+      <path d="M72 40 L168 40 L176 96 Q178 140 172 176 L130 176 Q126 140 120 116 Q114 140 110 176 L68 176 Q62 140 64 96 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
+      <path d="M72 40 L168 40 L170 58 L70 58 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>
+      <path d="M108 44 Q120 54 132 44" stroke="${line}" stroke-width="2" fill="none"/></svg>`;
+    if (/spodnie|jean/.test(c)) return `<svg viewBox="0 0 240 300" width="56%" style="position:relative;z-index:1">
+      <path d="M78 34 L162 34 L168 92 Q172 190 166 262 L128 262 Q124 180 120 132 Q116 180 112 262 L74 262 Q68 190 72 92 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
+      <path d="M78 34 L162 34 L164 54 L76 54 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>
+      <path d="M84 62 l24 6 l-3 30 l-24 -6 Z M156 62 l-24 6 l3 30 l24 -6 Z" fill="${lite}" stroke="${line}" stroke-width="2"/></svg>`;
+    const polo = /polo|t-shirt|koszul/.test(c), krotki = polo;
+    const kaptur = /puch|park|bluz/.test(c), dlugi = /park|overshirt/.test(c), kam = /kamizel/.test(c);
+    const pik = /puch|kamizel/.test(c), dol = dlugi ? 268 : (krotki ? 226 : 248);
+    return `<svg viewBox="0 0 240 300" width="72%" style="position:relative;z-index:1">
+      <path d="M120 10 L120 26" stroke="#B0A895" stroke-width="2.5"/><circle cx="120" cy="8" r="5" stroke="#B0A895" stroke-width="2.5" fill="none"/>
+      ${kaptur ? `<path d="M85 52 Q88 24 120 22 Q152 24 155 52 Q140 44 120 44 Q100 44 85 52 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>`
+        : polo ? `<path d="M104 44 L120 68 L136 44 L148 50 L138 62 L120 78 L102 62 L92 50 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>`
         : `<path d="M92 46 Q120 34 148 46 L142 58 Q120 48 98 58 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>`}
-      ${!kamizelka ? `
-        <path d="M78 62 Q52 78 44 150 Q42 168 48 184 L74 176 Q70 130 84 92 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
-        <path d="M162 62 Q188 78 196 150 Q198 168 192 184 L166 176 Q170 130 156 92 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>` : ""}
+      ${kam ? "" : krotki
+        ? `<path d="M80 60 Q54 70 46 112 L74 122 Q76 96 86 84 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
+           <path d="M160 60 Q186 70 194 112 L166 122 Q164 96 154 84 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>`
+        : `<path d="M78 62 Q52 78 44 150 Q42 168 48 184 L74 176 Q70 130 84 92 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
+           <path d="M162 62 Q188 78 196 150 Q198 168 192 184 L166 176 Q170 130 156 92 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>`}
       <path d="M84 58 Q120 46 156 58 L162 96 Q166 160 160 ${dol} Q120 ${dol + 12} 80 ${dol} Q74 160 78 96 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
-      <path d="M120 58 L120 ${dol + 4}" stroke="${line}" stroke-width="2" stroke-dasharray="1 4"/>
-      ${pik ? [92,118,144,170,196,222].map(y => `<path d="M80 ${y} Q120 ${y+10} 160 ${y}" stroke="${line}" stroke-width="1.6" opacity=".7" fill="none"/>`).join("") : ""}
-      <path d="M88 ${dol - 52} l22 4 l-2 26 l-22 -4 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>
-      <path d="M152 ${dol - 52} l-22 4 l2 26 l22 -4 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>
-      ${!kamizelka ? `<rect x="52" y="118" width="18" height="22" rx="3" fill="${lite}" stroke="${line}" stroke-width="2" transform="rotate(-8 61 129)"/>
-        <path d="M46 182 L76 174 L78 188 L48 196 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>
-        <path d="M194 182 L164 174 L162 188 L192 196 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>` : ""}
+      ${polo ? `<path d="M120 68 L120 108" stroke="${line}" stroke-width="2"/><circle cx="120" cy="80" r="2.5" fill="${line}"/><circle cx="120" cy="96" r="2.5" fill="${line}"/>`
+        : `<path d="M120 58 L120 ${dol + 4}" stroke="${line}" stroke-width="2" stroke-dasharray="1 4"/>`}
+      ${pik ? [96,124,152,180,208].map(y => `<path d="M80 ${y} Q120 ${y+10} 160 ${y}" stroke="${line}" stroke-width="1.6" opacity=".7" fill="none"/>`).join("") : ""}
+      ${polo ? "" : `<path d="M88 ${dol-52} l22 4 l-2 26 l-22 -4 Z M152 ${dol-52} l-22 4 l2 26 l22 -4 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>`}
+      ${kam || krotki ? "" : `<rect x="52" y="118" width="17" height="21" rx="3" fill="${lite}" stroke="${line}" stroke-width="2" transform="rotate(-8 60 128)"/>`}
     </svg>`;
-  };
-  const thumbHTML = (p, big) => `
-    <div class="thumb"${big ? ' style="min-height:340px"' : ""}>
-      ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.brand)} ${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}
-      ${placeholder(p)}
-      <span class="badge">−${pct(p)}%</span>
-      ${p.hot && !big ? '<span class="hot">HOT</span>' : ""}
-    </div>`;
+  }
 
-  let catF = "Wszystko", minPct = 0, sort = "drop";
+  const imgHTML = (p, cls) => `<div class="${cls}">
+    ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.brand)} ${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}
+    ${illo(p)}</div>`;
+
+  // ——— Stan ———
+  let catF = "Wszystko", season = "", minPct = 0, sort = "drop", brandF = "", q = "";
+  let shown = 24;                 // ile produktów widać (doczytywane porcjami)
+  const PORCJA = 24;
+  let sel = [];                   // indeksy wybranych produktów
   const cats = [...new Set(PRODUCTS.map(p => p.cat))].sort();
+  const brands = [...new Set(PRODUCTS.map(p => p.brand))].sort();
 
-  // nawigacja kategorii
+  // Pasek marek pokazujemy tylko, gdy jest z czego wybierać
+  if (brands.length > 1) {
+    const bb = document.getElementById("brandBar");
+    brands.slice(0, 12).forEach(b => {
+      const el = document.createElement("button");
+      el.className = "chip"; el.dataset.b = b; el.textContent = b;
+      el.onclick = () => { brandF = brandF === b ? "" : b; shown = PORCJA; render(); };
+      bb.appendChild(el);
+    });
+  }
+
+  let qT;
+  document.getElementById("q").addEventListener("input", e => {
+    clearTimeout(qT);
+    qT = setTimeout(() => { q = e.target.value.trim().toLowerCase(); shown = PORCJA; render(); }, 200);
+  });
+
   const nav = document.getElementById("catNav");
   ["Wszystko", ...cats].forEach(c => {
     const b = document.createElement("button");
-    b.textContent = c;
-    b.onclick = () => { catF = c; render(); };
+    b.textContent = c; b.onclick = () => { catF = c; shown = PORCJA; render(); };
     nav.appendChild(b);
   });
 
-  // filtry przeceny
-  const pf = document.getElementById("pctFilters");
-  [0, 25, 30, 40].forEach(v => {
-    const b = document.createElement("button");
-    b.className = "chip"; b.dataset.v = v;
-    b.textContent = v === 0 ? "Dowolna" : `−${v}%+`;
-    b.onclick = () => { minPct = v; render(); };
-    pf.appendChild(b);
+  document.querySelectorAll(".filters .chip").forEach(b => {
+    b.onclick = () => {
+      if (b.dataset.s) season = season === b.dataset.s ? "" : b.dataset.s;
+      if (b.dataset.p) minPct = minPct === +b.dataset.p ? 0 : +b.dataset.p;
+      shown = PORCJA; render();
+    };
   });
+  document.getElementById("sortSel").onchange = e => { sort = e.target.value; shown = PORCJA; render(); };
 
-  document.getElementById("sortSel").onchange = e => { sort = e.target.value; render(); };
-
-  // ticker
-  const hot = PRODUCTS.filter(p => p.hot).length ? PRODUCTS.filter(p => p.hot) : PRODUCTS.slice(0, 6);
+  const hot = PRODUCTS.filter(p => p.hot);
   document.getElementById("ticker").innerHTML = [...hot, ...hot, ...hot].map(p =>
-    `<span class="tick-item"><span class="tick-pct">−${pct(p)}%</span>${esc(p.brand)} ${esc(p.name)}<span class="tick-dot">●</span></span>`
-  ).join("");
+    `<span class="tick-item"><span class="tick-pct">−${pct(p)}%</span>${esc(p.brand)} ${esc(p.name)}<span class="tick-dot">●</span></span>`).join("");
 
-  // modal
-  const overlay = document.getElementById("overlay");
-  const modal = document.getElementById("modal");
+  const overlay = document.getElementById("overlay"), sheet = document.getElementById("sheet");
   overlay.onclick = e => { if (e.target === overlay) overlay.classList.remove("open"); };
+  window.closeSheet = () => overlay.classList.remove("open");
+
+  let toastT;
+  function toast(msg) {
+    document.querySelectorAll(".toast").forEach(t => t.remove());
+    const d = document.createElement("div"); d.className = "toast"; d.textContent = msg;
+    document.body.appendChild(d); clearTimeout(toastT); toastT = setTimeout(() => d.remove(), 2000);
+  }
+
+  // ——— Selekcja ———
+  window.toggleSel = (i, ev) => {
+    if (ev) ev.stopPropagation();
+    const at = sel.indexOf(i);
+    if (at >= 0) { sel.splice(at, 1); toast("Usunięto z selekcji"); }
+    else { sel.push(i); toast(esc(PRODUCTS[i].brand) + " — dodano do selekcji"); }
+    render(); updateBar();
+  };
+
+  function updateBar() {
+    const bar = document.getElementById("bar");
+    if (!sel.length) { bar.classList.remove("show"); return; }
+    const tot = sel.reduce((s, i) => s + zl(PRODUCTS[i].price, PRODUCTS[i].currency), 0);
+    const sav = sel.reduce((s, i) => s + zl(PRODUCTS[i].oldPrice - PRODUCTS[i].price, PRODUCTS[i].currency), 0);
+    document.getElementById("barText").innerHTML =
+      sel.length + (sel.length === 1 ? " produkt" : sel.length < 5 ? " produkty" : " produktów") +
+      " · " + tot.toLocaleString("pl-PL") + " zł<br><b>oszczędzasz " + sav.toLocaleString("pl-PL") + " zł</b>";
+    bar.classList.add("show");
+  }
+  document.getElementById("barBtn").onclick = openSel;
+
+  function openSel() {
+    const groups = {};
+    sel.forEach(i => { const p = PRODUCTS[i]; (groups[p.store] = groups[p.store] || []).push(i); });
+    const tot = sel.reduce((s, i) => s + zl(PRODUCTS[i].price, PRODUCTS[i].currency), 0);
+    const sav = sel.reduce((s, i) => s + zl(PRODUCTS[i].oldPrice - PRODUCTS[i].price, PRODUCTS[i].currency), 0);
+
+    sheet.innerHTML = `
+      <div class="sheet-head"><h2>Twoja selekcja</h2><button class="close" onclick="closeSheet()">Zamknij</button></div>
+      ${Object.keys(groups).map(store => `
+        <div class="store-group">${esc(store)}</div>
+        ${groups[store].map(i => { const p = PRODUCTS[i]; return `
+          <div class="row">
+            ${imgHTML(p, "row-th")}
+            <div style="flex:1">
+              <div class="brand">${esc(p.brand)}</div>
+              <div style="font-family:var(--serif);font-size:15px;line-height:1.25;margin:3px 0">${esc(p.name)}</div>
+              <div class="color">${esc(p.color || "")}</div>
+            </div>
+            <div style="text-align:right">
+              <div class="pnew">${price(p.price, p.currency)}</div>
+              <button class="row-x" onclick="toggleSel(${i}, event)">usuń</button>
+            </div>
+          </div>`; }).join("")}
+      `).join("")}
+      <div class="totals"><span>Razem</span><b>${tot.toLocaleString("pl-PL")} zł</b></div>
+      <div class="saved">Oszczędzasz ${sav.toLocaleString("pl-PL")} zł względem cen regularnych</div>
+      ${Object.keys(groups).map(store => `
+        <a class="cta ${store === Object.keys(groups)[0] ? "" : "outline"}" style="margin-top:10px"
+           href="${esc(PRODUCTS[groups[store][0]].url)}" target="_blank" rel="noopener sponsored">
+           Sfinalizuj w ${esc(store)} — ${groups[store].length} szt.</a>`).join("")}
+      <p style="font-size:11px;color:var(--faint);line-height:1.7;margin-top:18px;text-align:center">
+        Selekcja to Twoja lista zakupowa. Finalizujesz ją w sklepie, który wysyła towar i obsługuje zwroty.</p>`;
+    overlay.classList.add("open");
+  }
+
+  // ——— Karta produktu ———
   window.openProduct = i => {
-    const p = PRODUCTS[i];
-    modal.innerHTML = `
-      ${thumbHTML(p, true)}
-      <div class="mbody">
-        <div class="brand">${esc(p.brand)}</div>
-        <h2 class="mname">${esc(p.name)}</h2>
-        <div class="color">${esc(p.color || "")}</div>
-        <div class="prices" style="margin:10px 0 4px">
-          <span class="pnew" style="font-size:26px">${price(p.price, p.currency)}</span>
-          <span class="pold">${price(p.oldPrice, p.currency)}</span>
-        </div>
-        <p class="save">Oszczędzasz ${price(p.oldPrice - p.price, p.currency)} · Sklep: ${esc(p.store)}</p>
-        <a class="cta" href="${esc(p.url)}" target="_blank" rel="noopener sponsored">Zobacz w sklepie ${esc(p.store)} →</a>
-        <button class="ghost" onclick="document.getElementById('overlay').classList.remove('open')">Wróć do dropów</button>
-      </div>`;
+    const p = PRODUCTS[i], inSel = sel.includes(i);
+    sheet.innerHTML = `
+      <div class="sheet-head"><h2 style="font-size:20px">${esc(p.brand)}</h2><button class="close" onclick="closeSheet()">Zamknij</button></div>
+      ${imgHTML(p, "p-img")}
+      <div style="font-family:var(--serif);font-size:27px;line-height:1.15">${esc(p.name)}</div>
+      <div class="color" style="margin-top:6px">${esc(p.color || "")}</div>
+      <div class="prices" style="margin-top:12px">
+        <span class="pnew" style="font-size:22px">${price(p.price, p.currency)}</span>
+        <span class="pold">${price(p.oldPrice, p.currency)}</span>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--accent)">−${pct(p)}%</span>
+      </div>
+      <p class="save">Oszczędzasz ${price(p.oldPrice - p.price, p.currency)} · ${esc(p.store)}</p>
+      <button class="cta dark" onclick="toggleSel(${i}); closeSheet();">${inSel ? "Usuń z selekcji" : "Dodaj do selekcji"}</button>
+      <a class="cta outline" href="${esc(p.url)}" target="_blank" rel="noopener sponsored">Kup w ${esc(p.store)}</a>
+      <p style="font-size:11px;color:var(--faint);line-height:1.7;margin-top:16px;text-align:center">
+        Rozmiary i dostępność sprawdzisz w sklepie. Cena w sklepie jest wiążąca.</p>`;
     overlay.classList.add("open");
   };
 
   function render() {
     document.querySelectorAll("#catNav button").forEach(b => b.classList.toggle("on", b.textContent === catF));
-    document.querySelectorAll("#pctFilters .chip").forEach(b => b.classList.toggle("on", +b.dataset.v === minPct));
-    let list = PRODUCTS.map((p, i) => ({ ...p, _i: i }))
-      .filter(p => (catF === "Wszystko" || p.cat === catF) && pct(p) >= minPct);
-    if (sort === "drop") list.sort((a, b) => pct(b) - pct(a));
-    if (sort === "asc") list.sort((a, b) => a.price - b.price);
-    if (sort === "desc") list.sort((a, b) => b.price - a.price);
+    document.querySelectorAll(".filters .chip").forEach(b => {
+      b.classList.toggle("on", (b.dataset.s && b.dataset.s === season) || (b.dataset.p && +b.dataset.p === minPct));
+    });
 
-    document.getElementById("grid").innerHTML = list.length === 0
-      ? '<div class="empty">Brak wyników dla tych filtrów.</div>'
-      : list.map(p => `
+    document.querySelectorAll("#brandBar .chip").forEach(b => b.classList.toggle("on", b.dataset.b === brandF));
+
+    let list = PRODUCTS.map((p, i) => ({ ...p, _i: i })).filter(p =>
+      (catF === "Wszystko" || p.cat === catF) &&
+      (brandF === "" || p.brand === brandF) &&
+      (season === "" || (season === "lato" ? p.season === "lato" : p.season !== "lato")) &&
+      pct(p) >= minPct &&
+      (q === "" || (p.brand + " " + p.name + " " + (p.color || "") + " " + p.cat).toLowerCase().includes(q)));
+    if (sort === "drop") list.sort((a, b) => pct(b) - pct(a));
+    if (sort === "asc") list.sort((a, b) => zl(a.price, a.currency) - zl(b.price, b.currency));
+    if (sort === "desc") list.sort((a, b) => zl(b.price, b.currency) - zl(a.price, a.currency));
+
+    const total = list.length;
+    const widoczne = list.slice(0, shown);
+    document.getElementById("count").textContent =
+      total === 0 ? "" : (total <= shown ? total + " PRODUKTÓW" : widoczne.length + " Z " + total + " PRODUKTÓW");
+
+    const mw = document.getElementById("moreWrap");
+    mw.innerHTML = total > shown
+      ? `<button class="more" id="moreBtn">Pokaż kolejne ${Math.min(PORCJA, total - shown)}</button>`
+      : "";
+    if (total > shown) document.getElementById("moreBtn").onclick = () => { shown += PORCJA; render(); };
+
+    document.getElementById("grid").innerHTML = total === 0
+      ? '<div class="empty">Brak produktów dla wybranych filtrów</div>'
+      : widoczne.map(p => `
         <article class="card" onclick="openProduct(${p._i})">
-          ${thumbHTML(p)}
+          <div class="thumb">
+            ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.brand)} ${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}
+            ${illo(p)}
+            <span class="badge">−${pct(p)}%</span>
+            ${p.hot ? '<span class="tag">SELEKCJA</span>' : p.season === "lato" ? '<span class="tag">LATO</span>' : ""}
+          </div>
           <div class="body">
             <div class="brand">${esc(p.brand)}</div>
             <div class="name">${esc(p.name)}</div>
             <div class="color">${esc(p.color || "")}</div>
-            <div class="prices">
-              <span class="pnew">${price(p.price, p.currency)}</span>
-              <span class="pold">${price(p.oldPrice, p.currency)}</span>
-            </div>
+            <div class="prices"><span class="pnew">${price(p.price, p.currency)}</span><span class="pold">${price(p.oldPrice, p.currency)}</span></div>
             <div class="store">${esc(p.store)}</div>
           </div>
+          <button class="add ${sel.includes(p._i) ? "in" : ""}" onclick="toggleSel(${p._i}, event)"
+            aria-label="Dodaj do selekcji">${sel.includes(p._i) ? "✓" : "+"}</button>
         </article>`).join("");
   }
-  render();
+
+  render(); updateBar();
 })();
 </script>
 </body>
