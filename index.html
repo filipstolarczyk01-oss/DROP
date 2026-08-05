@@ -117,6 +117,7 @@
 <footer>
   DROP — agregator przecen. Ceny pochodzą ze sklepów partnerskich i mogą się zmienić.
   Linki mogą być linkami afiliacyjnymi — kupując przez nie, wspierasz rozwój serwisu bez dodatkowych kosztów.
+  Ceny zagraniczne przeliczane na złotówki po kursie orientacyjnym — w sklepie zapłacisz w walucie oryginalnej.
   Płatność zawsze w sklepie docelowym.
 </footer>
 
@@ -127,20 +128,57 @@
 <script src="products.js"></script>
 <script>
 (function () {
-  const fmt = { PLN: n => n.toLocaleString("pl-PL") + " zł", USD: n => "$" + n.toLocaleString("en-US"), EUR: n => n.toLocaleString("de-DE") + " €" };
-  const price = (n, c) => (fmt[c] || fmt.PLN)(n);
+  // ——— KURSY WALUT ———
+  // Ceny z zagranicznych sklepów są automatycznie przeliczane na złotówki.
+  // Kursy aktualizuj co jakiś czas (sprawdź w Google "kurs dolara").
+  const KURS = { USD: 3.75, EUR: 4.25, GBP: 5.05, PLN: 1 };
+  const naPLN = (n, c) => Math.round(n * (KURS[c] || 1));
+  const price = (n, c) => naPLN(n, c).toLocaleString("pl-PL") + " zł";
   const pct = p => Math.round((1 - p.price / p.oldPrice) * 100);
   const esc = s => String(s || "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 
   // placeholder SVG w kolorze neutralnym, gdy brak zdjęcia lub zdjęcie nie wczyta się
-  const placeholder = brand => {
-    const ini = esc(brand.split(/[\s.']+/).filter(Boolean).map(w => w[0]).join("").slice(0, 2).toUpperCase());
-    return `<div style="font-family:var(--serif);font-size:56px;color:rgba(17,17,17,.18);letter-spacing:6px">${ini}</div>`;
+  // Ilustracja ubrania rysowana automatycznie, gdy produkt nie ma zdjęcia.
+  // Po wgraniu feedu z Awin zdjęcia zastąpią ilustracje same z siebie.
+  const HUE = { "Kurtki": "#2b3a52", "Kurtki puchowe": "#1b2a47", "Parki": "#7a6a4e",
+                "Kamizelki": "#2a3040", "Overshirty": "#3a5a8c", "Bluzy": "#2f6bb5",
+                "Koszule": "#4a6a8a", "Spodnie": "#43506b" };
+  const shade = (hex, f) => { const n = parseInt(hex.slice(1), 16);
+    const c = v => Math.max(0, Math.min(255, Math.round(v * f)));
+    return `rgb(${c(n >> 16)},${c((n >> 8) & 255)},${c(n & 255)})`; };
+
+  const placeholder = p => {
+    const hue = p.hue || HUE[p.cat] || "#3a4256";
+    const line = shade(hue, 0.55), lite = shade(hue, 1.3);
+    const cat = (p.cat || "").toLowerCase();
+    const kaptur = /puch|park|bluz|hood/.test(cat);
+    const dlugi = /park|overshirt/.test(cat);
+    const kamizelka = /kamizel|vest/.test(cat);
+    const pik = /puch|kamizel/.test(cat);
+    const dol = dlugi ? 268 : 248;
+    return `<svg viewBox="0 0 240 300" width="72%" style="position:relative;z-index:1" aria-hidden="true">
+      <path d="M120 10 L120 26" stroke="#8a8577" stroke-width="3"/>
+      <circle cx="120" cy="8" r="5" stroke="#8a8577" stroke-width="3" fill="none"/>
+      ${kaptur
+        ? `<path d="M85 52 Q88 24 120 22 Q152 24 155 52 Q140 44 120 44 Q100 44 85 52 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>`
+        : `<path d="M92 46 Q120 34 148 46 L142 58 Q120 48 98 58 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>`}
+      ${!kamizelka ? `
+        <path d="M78 62 Q52 78 44 150 Q42 168 48 184 L74 176 Q70 130 84 92 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
+        <path d="M162 62 Q188 78 196 150 Q198 168 192 184 L166 176 Q170 130 156 92 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>` : ""}
+      <path d="M84 58 Q120 46 156 58 L162 96 Q166 160 160 ${dol} Q120 ${dol + 12} 80 ${dol} Q74 160 78 96 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
+      <path d="M120 58 L120 ${dol + 4}" stroke="${line}" stroke-width="2" stroke-dasharray="1 4"/>
+      ${pik ? [92,118,144,170,196,222].map(y => `<path d="M80 ${y} Q120 ${y+10} 160 ${y}" stroke="${line}" stroke-width="1.6" opacity=".7" fill="none"/>`).join("") : ""}
+      <path d="M88 ${dol - 52} l22 4 l-2 26 l-22 -4 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>
+      <path d="M152 ${dol - 52} l-22 4 l2 26 l22 -4 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>
+      ${!kamizelka ? `<rect x="52" y="118" width="18" height="22" rx="3" fill="${lite}" stroke="${line}" stroke-width="2" transform="rotate(-8 61 129)"/>
+        <path d="M46 182 L76 174 L78 188 L48 196 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>
+        <path d="M194 182 L164 174 L162 188 L192 196 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>` : ""}
+    </svg>`;
   };
   const thumbHTML = (p, big) => `
     <div class="thumb"${big ? ' style="min-height:340px"' : ""}>
       ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.brand)} ${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}
-      ${placeholder(p.brand)}
+      ${placeholder(p)}
       <span class="badge">−${pct(p)}%</span>
       ${p.hot && !big ? '<span class="hot">HOT</span>' : ""}
     </div>`;
