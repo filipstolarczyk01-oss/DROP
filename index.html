@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DROP — przeceny w luksusowym outerwearze</title>
+<meta name="description" content="Agregator prawdziwych przecen: Stone Island, Moncler, C.P. Company, Canada Goose, Arc'teryx. Największe spadki cen w jednym miejscu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Archivo:wght@400;500;600&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F6F2; --ink: #111; --muted: #555; --faint: #999;
+    --line: #E3E0D8; --accent: #8B1E24; --card-line: #E9E6DE;
+    --serif: 'Bodoni Moda', serif; --sans: 'Archivo', sans-serif; --mono: 'Space Grotesk', monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink); }
+  a { color: inherit; }
+
+  /* Ticker */
+  .ticker { background: #111; color: var(--bg); overflow: hidden; padding: 8px 0; font-family: var(--mono); font-size: 12px; }
+  .marquee { display: inline-flex; white-space: nowrap; animation: scroll 32s linear infinite; }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
+  .tick-item { margin: 0 8px; letter-spacing: .5px; }
+  .tick-pct { color: #E8B4B8; font-weight: 500; margin-right: 6px; }
+  .tick-dot { margin-left: 16px; font-size: 7px; vertical-align: middle; color: var(--accent); }
+
+  /* Header */
+  header { display: flex; align-items: center; gap: 20px; padding: 18px 28px; border-bottom: 1px solid var(--line); flex-wrap: wrap; background: var(--bg); position: sticky; top: 0; z-index: 20; }
+  .logo { font-family: var(--serif); font-size: 28px; font-weight: 600; letter-spacing: 2px; }
+  .logo span { color: var(--accent); }
+  nav { display: flex; gap: 4px; flex-wrap: wrap; flex: 1; }
+  nav button { background: none; border: none; padding: 8px 12px; font-size: 13px; cursor: pointer; color: var(--muted); font-family: inherit; letter-spacing: .3px; }
+  nav button.on { color: var(--ink); border-bottom: 2px solid var(--accent); }
+  .live { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; color: var(--accent); }
+
+  /* Hero */
+  .hero { padding: 56px 28px 32px; max-width: 900px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin: 0 0 16px; }
+  h1 { font-family: var(--serif); font-size: clamp(34px, 6vw, 60px); line-height: 1.08; margin: 0; font-weight: 600; }
+  h1 em { font-weight: 400; }
+  .hero p.sub { font-size: 15px; color: var(--muted); max-width: 620px; line-height: 1.6; margin-top: 18px; }
+
+  /* Filtry */
+  .filters { display: flex; gap: 24px; align-items: center; padding: 10px 28px 20px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+  .fgroup { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .flabel { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--faint); margin-right: 4px; }
+  .chip { background: #fff; border: 1px solid #DDD9CF; padding: 7px 14px; font-size: 13px; cursor: pointer; font-family: inherit; border-radius: 999px; }
+  .chip.on { background: #111; color: #fff; border-color: #111; }
+  select { padding: 8px 12px; font-size: 13px; border: 1px solid #DDD9CF; background: #fff; font-family: inherit; }
+  .push { margin-left: auto; }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px; padding: 32px 28px; max-width: 1400px; margin: 0 auto; }
+  .empty { grid-column: 1 / -1; padding: 60px; text-align: center; color: #777; font-size: 14px; }
+  .card { background: #fff; border: 1px solid var(--card-line); cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.12); }
+  .thumb { position: relative; aspect-ratio: 3 / 4; display: flex; align-items: center; justify-content: center; overflow: hidden; background: linear-gradient(170deg, #EFEBE2, #E2DCCE); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+  .badge { position: absolute; top: 12px; left: 12px; background: var(--accent); color: #fff; font-family: var(--mono); font-size: 13px; padding: 4px 9px; z-index: 2; }
+  .hot { position: absolute; bottom: 12px; left: 12px; background: var(--accent); color: #fff; font-family: var(--mono); font-size: 10px; letter-spacing: 2px; padding: 3px 8px; z-index: 2; }
+  .body { padding: 14px 16px 16px; }
+  .brand { font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--faint); font-family: var(--mono); }
+  .name { font-family: var(--serif); font-size: 16px; margin: 4px 0 2px; line-height: 1.25; }
+  .color { font-size: 12px; color: var(--faint); margin-bottom: 8px; }
+  .prices { display: flex; align-items: baseline; gap: 10px; }
+  .pnew { font-family: var(--mono); font-size: 16px; font-weight: 500; }
+  .pold { font-family: var(--mono); font-size: 13px; color: #B0AA9C; text-decoration: line-through; }
+  .store { font-size: 11px; color: var(--faint); margin-top: 8px; }
+
+  /* Modal */
+  .overlay { position: fixed; inset: 0; background: rgba(15,14,12,.55); z-index: 50; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .overlay.open { display: flex; }
+  .modal { background: var(--bg); max-width: 780px; width: 100%; display: grid; grid-template-columns: minmax(240px, 1fr) 1.2fr; max-height: 90vh; overflow: auto; }
+  @media (max-width: 640px) { .modal { grid-template-columns: 1fr; } }
+  .modal .thumb { min-height: 340px; aspect-ratio: auto; }
+  .mbody { padding: 32px 28px; }
+  .mname { font-family: var(--serif); font-size: 28px; margin: 6px 0 2px; font-weight: 600; line-height: 1.15; }
+  .save { font-size: 13px; color: var(--accent); margin: 6px 0 20px; }
+  .cta { display: block; width: 100%; background: var(--accent); color: #fff; border: none; padding: 15px 0; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; font-family: inherit; text-align: center; text-decoration: none; }
+  .ghost { display: block; width: 100%; background: none; border: none; padding: 12px 0 0; font-size: 13px; color: #777; cursor: pointer; text-decoration: underline; font-family: inherit; }
+
+  footer { padding: 40px 28px 60px; font-size: 12px; color: var(--faint); text-align: center; border-top: 1px solid var(--line); margin-top: 20px; line-height: 1.6; max-width: 700px; margin-left: auto; margin-right: auto; }
+  button:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<div class="ticker"><div class="marquee" id="ticker"></div></div>
+
+<header>
+  <div class="logo">DROP<span>↓</span></div>
+  <nav id="catNav"></nav>
+  <div class="live">● LIVE</div>
+</header>
+
+<section class="hero">
+  <p class="eyebrow">Agregator przecen · Moda premium i luksusowa</p>
+  <h1>Realne <em>spadki cen</em><br>w luksusowym outerwearze.</h1>
+  <p class="sub">Stone Island, Moncler, C.P. Company i inne marki premium — aktualne przeceny z zaufanych sklepów w jednym miejscu. Klikasz, kupujesz bezpośrednio w sklepie.</p>
+</section>
+
+<div class="filters">
+  <div class="fgroup" id="pctFilters"><span class="flabel">Min. przecena</span></div>
+  <div class="fgroup push">
+    <select id="sortSel">
+      <option value="drop">Największa przecena</option>
+      <option value="asc">Cena: od najniższej</option>
+      <option value="desc">Cena: od najwyższej</option>
+    </select>
+  </div>
+</div>
+
+<main class="grid" id="grid"></main>
+
+<footer>
+  DROP — agregator przecen. Ceny pochodzą ze sklepów partnerskich i mogą się zmienić.
+  Linki mogą być linkami afiliacyjnymi — kupując przez nie, wspierasz rozwój serwisu bez dodatkowych kosztów.
+  Płatność zawsze w sklepie docelowym.
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script src="products.js"></script>
+<script>
+(function () {
+  const fmt = { PLN: n => n.toLocaleString("pl-PL") + " zł", USD: n => "$" + n.toLocaleString("en-US"), EUR: n => n.toLocaleString("de-DE") + " €" };
+  const price = (n, c) => (fmt[c] || fmt.PLN)(n);
+  const pct = p => Math.round((1 - p.price / p.oldPrice) * 100);
+  const esc = s => String(s || "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+
+  // placeholder SVG w kolorze neutralnym, gdy brak zdjęcia lub zdjęcie nie wczyta się
+  const placeholder = brand => {
+    const ini = esc(brand.split(/[\s.']+/).filter(Boolean).map(w => w[0]).join("").slice(0, 2).toUpperCase());
+    return `<div style="font-family:var(--serif);font-size:56px;color:rgba(17,17,17,.18);letter-spacing:6px">${ini}</div>`;
+  };
+  const thumbHTML = (p, big) => `
+    <div class="thumb"${big ? ' style="min-height:340px"' : ""}>
+      ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.brand)} ${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}
+      ${placeholder(p.brand)}
+      <span class="badge">−${pct(p)}%</span>
+      ${p.hot && !big ? '<span class="hot">HOT</span>' : ""}
+    </div>`;
+
+  let catF = "Wszystko", minPct = 0, sort = "drop";
+  const cats = [...new Set(PRODUCTS.map(p => p.cat))].sort();
+
+  // nawigacja kategorii
+  const nav = document.getElementById("catNav");
+  ["Wszystko", ...cats].forEach(c => {
+    const b = document.createElement("button");
+    b.textContent = c;
+    b.onclick = () => { catF = c; render(); };
+    nav.appendChild(b);
+  });
+
+  // filtry przeceny
+  const pf = document.getElementById("pctFilters");
+  [0, 25, 30, 40].forEach(v => {
+    const b = document.createElement("button");
+    b.className = "chip"; b.dataset.v = v;
+    b.textContent = v === 0 ? "Dowolna" : `−${v}%+`;
+    b.onclick = () => { minPct = v; render(); };
+    pf.appendChild(b);
+  });
+
+  document.getElementById("sortSel").onchange = e => { sort = e.target.value; render(); };
+
+  // ticker
+  const hot = PRODUCTS.filter(p => p.hot).length ? PRODUCTS.filter(p => p.hot) : PRODUCTS.slice(0, 6);
+  document.getElementById("ticker").innerHTML = [...hot, ...hot, ...hot].map(p =>
+    `<span class="tick-item"><span class="tick-pct">−${pct(p)}%</span>${esc(p.brand)} ${esc(p.name)}<span class="tick-dot">●</span></span>`
+  ).join("");
+
+  // modal
+  const overlay = document.getElementById("overlay");
+  const modal = document.getElementById("modal");
+  overlay.onclick = e => { if (e.target === overlay) overlay.classList.remove("open"); };
+  window.openProduct = i => {
+    const p = PRODUCTS[i];
+    modal.innerHTML = `
+      ${thumbHTML(p, true)}
+      <div class="mbody">
+        <div class="brand">${esc(p.brand)}</div>
+        <h2 class="mname">${esc(p.name)}</h2>
+        <div class="color">${esc(p.color || "")}</div>
+        <div class="prices" style="margin:10px 0 4px">
+          <span class="pnew" style="font-size:26px">${price(p.price, p.currency)}</span>
+          <span class="pold">${price(p.oldPrice, p.currency)}</span>
+        </div>
+        <p class="save">Oszczędzasz ${price(p.oldPrice - p.price, p.currency)} · Sklep: ${esc(p.store)}</p>
+        <a class="cta" href="${esc(p.url)}" target="_blank" rel="noopener sponsored">Zobacz w sklepie ${esc(p.store)} →</a>
+        <button class="ghost" onclick="document.getElementById('overlay').classList.remove('open')">Wróć do dropów</button>
+      </div>`;
+    overlay.classList.add("open");
+  };
+
+  function render() {
+    document.querySelectorAll("#catNav button").forEach(b => b.classList.toggle("on", b.textContent === catF));
+    document.querySelectorAll("#pctFilters .chip").forEach(b => b.classList.toggle("on", +b.dataset.v === minPct));
+    let list = PRODUCTS.map((p, i) => ({ ...p, _i: i }))
+      .filter(p => (catF === "Wszystko" || p.cat === catF) && pct(p) >= minPct);
+    if (sort === "drop") list.sort((a, b) => pct(b) - pct(a));
+    if (sort === "asc") list.sort((a, b) => a.price - b.price);
+    if (sort === "desc") list.sort((a, b) => b.price - a.price);
+
+    document.getElementById("grid").innerHTML = list.length === 0
+      ? '<div class="empty">Brak wyników dla tych filtrów.</div>'
+      : list.map(p => `
+        <article class="card" onclick="openProduct(${p._i})">
+          ${thumbHTML(p)}
+          <div class="body">
+            <div class="brand">${esc(p.brand)}</div>
+            <div class="name">${esc(p.name)}</div>
+            <div class="color">${esc(p.color || "")}</div>
+            <div class="prices">
+              <span class="pnew">${price(p.price, p.currency)}</span>
+              <span class="pold">${price(p.oldPrice, p.currency)}</span>
+            </div>
+            <div class="store">${esc(p.store)}</div>
+          </div>
+        </article>`).join("");
+  }
+  render();
+})();
+</script>
+</body>
+</html>
