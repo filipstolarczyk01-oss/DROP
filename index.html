@@ -94,7 +94,7 @@
     background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1; cursor: pointer; z-index: 4; font-family: var(--sans); }
   .add.in { background: var(--ink); color: #fff; border-color: var(--ink); }
 
-  /* Pasek selekcji */
+  /* Pasek torby */
   .bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--ink); color: #EDE7DC; z-index: 40;
     display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; transform: translateY(105%); transition: transform .3s ease; }
   .bar.show { transform: translateY(0); }
@@ -121,7 +121,7 @@
   .cta.dark { background: var(--ink); }
   .cta.outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); margin-top: 10px; }
 
-  /* Lista selekcji */
+  /* Lista w torbie */
   .row { display: flex; gap: 14px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--line); }
   .row-th { width: 54px; height: 68px; flex-shrink: 0; background: linear-gradient(168deg, #F4F0E8, #E8E2D6);
     display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
@@ -189,7 +189,7 @@
 
 <div class="bar" id="bar">
   <div class="bar-l" id="barText"></div>
-  <button id="barBtn">Zobacz selekcję</button>
+  <button id="barBtn">Zobacz torbę</button>
 </div>
 
 <div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
@@ -310,12 +310,12 @@
     document.body.appendChild(d); clearTimeout(toastT); toastT = setTimeout(() => d.remove(), 2000);
   }
 
-  // ——— Selekcja ———
+  // ——— Torba (lista zakupowa) ———
   window.toggleSel = (i, ev) => {
     if (ev) ev.stopPropagation();
     const at = sel.indexOf(i);
-    if (at >= 0) { sel.splice(at, 1); toast("Usunięto z selekcji"); }
-    else { sel.push(i); toast(esc(PRODUCTS[i].brand) + " — dodano do selekcji"); }
+    if (at >= 0) { sel.splice(at, 1); toast("Usunięto z torby"); }
+    else { sel.push(i); toast(esc(PRODUCTS[i].brand) + " — dodano do torby"); }
     render(); updateBar();
   };
 
@@ -338,7 +338,7 @@
     const sav = sel.reduce((s, i) => s + zl(PRODUCTS[i].oldPrice - PRODUCTS[i].price, PRODUCTS[i].currency), 0);
 
     sheet.innerHTML = `
-      <div class="sheet-head"><h2>Twoja selekcja</h2><button class="close" onclick="closeSheet()">Zamknij</button></div>
+      <div class="sheet-head"><h2>Twoja torba</h2><button class="close" onclick="closeSheet()">Zamknij</button></div>
       ${Object.keys(groups).map(store => `
         <div class="store-group">${esc(store)}</div>
         ${groups[store].map(i => { const p = PRODUCTS[i]; return `
@@ -362,7 +362,7 @@
            href="${esc(PRODUCTS[groups[store][0]].url)}" target="_blank" rel="noopener sponsored">
            Sfinalizuj w ${esc(store)} — ${groups[store].length} szt.</a>`).join("")}
       <p style="font-size:11px;color:var(--faint);line-height:1.7;margin-top:18px;text-align:center">
-        Selekcja to Twoja lista zakupowa. Finalizujesz ją w sklepie, który wysyła towar i obsługuje zwroty.</p>`;
+        Torba to Twoja lista zakupowa w DROP. Finalizujesz ją w sklepie, który wysyła towar i obsługuje zwroty.</p>`;
     overlay.classList.add("open");
   }
 
@@ -380,7 +380,7 @@
         <span style="font-family:var(--mono);font-size:12px;color:var(--accent)">−${pct(p)}%</span>
       </div>
       <p class="save">Oszczędzasz ${price(p.oldPrice - p.price, p.currency)} · ${esc(p.store)}</p>
-      <button class="cta dark" onclick="toggleSel(${i}); closeSheet();">${inSel ? "Usuń z selekcji" : "Dodaj do selekcji"}</button>
+      <button class="cta dark" onclick="toggleSel(${i}); closeSheet();">${inSel ? "Usuń z torby" : "Dodaj do torby"}</button>
       <a class="cta outline" href="${esc(p.url)}" target="_blank" rel="noopener sponsored">Kup w ${esc(p.store)}</a>
       <p style="font-size:11px;color:var(--faint);line-height:1.7;margin-top:16px;text-align:center">
         Rozmiary i dostępność sprawdzisz w sklepie. Cena w sklepie jest wiążąca.</p>`;
@@ -424,7 +424,7 @@
             ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.brand)} ${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}
             ${illo(p)}
             <span class="badge">−${pct(p)}%</span>
-            ${p.hot ? '<span class="tag">SELEKCJA</span>' : p.season === "lato" ? '<span class="tag">LATO</span>' : ""}
+            ${p.hot ? '<span class="tag">WYBÓR DROP</span>' : p.season === "lato" ? '<span class="tag">LATO</span>' : ""}
           </div>
           <div class="body">
             <div class="brand">${esc(p.brand)}</div>
@@ -434,7 +434,7 @@
             <div class="store">${esc(p.store)}</div>
           </div>
           <button class="add ${sel.includes(p._i) ? "in" : ""}" onclick="toggleSel(${p._i}, event)"
-            aria-label="Dodaj do selekcji">${sel.includes(p._i) ? "✓" : "+"}</button>
+            aria-label="Dodaj do torby">${sel.includes(p._i) ? "✓" : "+"}</button>
         </article>`).join("");
   }
 
