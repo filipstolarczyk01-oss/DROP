@@ -10,6 +10,8 @@
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#14100D">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2314100D'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' fill='%23FBFAF7' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,6 +64,22 @@
   .rule { width: 44px; height: 1px; background: var(--gold); margin: 30px auto 0; }
 
   /* Filtry */
+  .stats { display: flex; justify-content: center; gap: 34px; flex-wrap: wrap; margin-top: 34px; }
+  .stat { text-align: center; }
+  .stat b { display: block; font-family: var(--mono); font-size: 21px; font-weight: 500; }
+  .stat span { font-family: var(--mono); font-size: 9px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--faint); }
+  .totop { position: fixed; right: 18px; bottom: 92px; width: 42px; height: 42px; border: 1px solid var(--line);
+    background: var(--paper); color: var(--ink); font-size: 15px; cursor: pointer; z-index: 35; opacity: 0;
+    pointer-events: none; transition: opacity .25s; border-radius: 999px; }
+  .totop.show { opacity: 1; pointer-events: auto; }
+  .clear-f { background: none; border: none; color: var(--accent); font-size: 11px; letter-spacing: 1.5px;
+    text-transform: uppercase; text-decoration: underline; cursor: pointer; font-family: var(--sans); padding: 8px 6px; }
+  .verified { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 9px;
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--faint); margin-top: 14px; }
+  .verified::before { content: "✓"; color: var(--gold); font-size: 11px; }
+  .ship { font-size: 11px; color: var(--faint); line-height: 1.7; margin-top: 14px; text-align: center; }
+  .share-b { background: none; border: 1px solid var(--line); color: var(--muted); padding: 12px 0; width: 100%;
+    font-family: var(--sans); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; margin-top: 10px; }
   .filters { display: flex; gap: 8px; align-items: center; padding: 4px 22px 20px; flex-wrap: wrap; justify-content: center; }
   .chip { background: transparent; border: 1px solid var(--line); padding: 8px 16px; font-size: 11px; cursor: pointer;
     font-family: var(--sans); font-weight: 300; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); border-radius: 0; }
@@ -142,6 +160,25 @@
   .store-group { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
     color: var(--faint); padding-top: 18px; }
 
+  .brands { padding: 70px 22px 10px; }
+  .brand-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; max-width: 1100px; margin: 34px auto 0; }
+  .brand-c { position: relative; color: #EDE7DC; text-decoration: none; padding: 26px 20px; min-height: 132px;
+    display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; transition: transform .2s; }
+  .brand-c:hover { transform: translateY(-2px); }
+  .brand-c h3 { font-family: var(--serif); font-size: 23px; font-weight: 400; margin: 0; position: relative; }
+  .brand-c .b-off { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; color: var(--gold); position: relative; }
+  .brand-c .b-store { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; opacity: .65; position: relative; }
+  .recent-wrap { padding: 54px 22px 0; }
+  .recent-row { display: flex; gap: 12px; overflow-x: auto; padding: 22px 0 6px; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+  .recent-row::-webkit-scrollbar { display: none; }
+  .r-card { flex: 0 0 132px; cursor: pointer; background: var(--paper); border: 1px solid var(--card-line); }
+  .r-card .thumb { aspect-ratio: 3/4; }
+  .r-b { padding: 9px 10px 11px; }
+  .r-b .brand { font-size: 8px; }
+  .r-b .nm { font-family: var(--serif); font-size: 12px; line-height: 1.25; margin: 3px 0 4px; height: 30px; overflow: hidden; }
+  .r-b .pnew { font-size: 12px; }
+  .bag-clear { background: none; border: none; color: var(--faint); font-size: 11px; text-decoration: underline;
+    cursor: pointer; font-family: var(--sans); display: block; margin: 14px auto 0; }
   .sec-h { font-family: var(--serif); font-size: clamp(26px, 7vw, 38px); font-weight: 300; text-align: center; margin: 0 0 10px; }
   .sec-p { font-size: 14px; color: var(--muted); line-height: 1.8; text-align: center; max-width: 460px; margin: 0 auto; }
   .sec-p.wide { max-width: 620px; text-align: left; }
@@ -175,6 +212,19 @@
     padding: 11px 20px; font-size: 11px; letter-spacing: 1px; z-index: 100; max-width: 88vw; text-align: center; }
   button:focus-visible, select:focus-visible, a:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "DROP",
+  "description": "Kuratorowany przegląd przecen mody premium i luksusowej.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": { "@type": "EntryPoint", "urlTemplate": "/?q={search_term_string}" },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
 </head>
 <body>
 
@@ -196,12 +246,14 @@
   <h1 id="tH1"></h1>
   <p id="tLead"></p>
   <div class="rule"></div>
+  <div class="stats" id="stats"></div>
 </section>
 
 <div class="search-wrap">
   <input id="q" type="search" placeholder="" autocomplete="off">
 </div>
 <div class="filters" id="brandBar"></div>
+<div class="filters" id="storeBar"></div>
 <div class="filters">
   <button class="chip" data-s="lato" id="tSummer"></button>
   <button class="chip" data-s="zima" id="tOuter"></button>
@@ -214,9 +266,21 @@
   </select>
 </div>
 <div class="count" id="count"></div>
+<div style="text-align:center" id="clearWrap"></div>
 
 <main class="grid" id="grid"></main>
 <div id="moreWrap" style="text-align:center;padding:34px 22px 10px"></div>
+
+<section class="brands">
+  <h2 class="sec-h" id="tBrandsTitle"></h2>
+  <p class="sec-p" id="tBrandsLead"></p>
+  <div class="brand-grid" id="brandGrid"></div>
+</section>
+
+<section class="recent-wrap" id="recentWrap" style="display:none">
+  <h2 class="sec-h" style="font-size:22px" id="tRecent"></h2>
+  <div class="recent-row" id="recentRow"></div>
+</section>
 
 <section class="why">
   <h2 class="sec-h" id="tWhyTitle"></h2>
@@ -252,14 +316,17 @@
   <br><br>
   <!-- ZMIEŃ NA SWÓJ ADRES E-MAIL -->
   <a href="mailto:kontakt@twojadomena.pl" style="color:var(--muted)"><span id="tContact"></span>: kontakt@twojadomena.pl</a>
+  &nbsp;·&nbsp; <a href="polityka.html" style="color:var(--muted)" id="tPrivacy"></a>
 </footer>
+
+<button class="totop" id="toTop" aria-label="Do góry">↑</button>
 
 <div class="bar" id="bar">
   <div class="bar-l" id="barText"></div>
   <button id="barBtn"></button>
 </div>
 
-<div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
+<div class="overlay" id="overlay"><div class="sheet" id="sheet" role="dialog" aria-modal="true" tabindex="-1"></div></div>
 
 <script src="i18n.js"></script>
 <script src="products.js"></script>
@@ -341,11 +408,32 @@
     ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.brand)} ${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}
     ${illo(p)}</div>`;
 
+  // ——— Kafle marek: linki do realnych wyprzedaży u partnerów ———
+  const BRAND_SALES = [
+    { n: "Moncler",       off: 70, store: "SSENSE",  hue: "#101822", url: "https://www.ssense.com/en-us/men/sale/designers/moncler" },
+    { n: "C.P. Company",  off: 60, store: "SSENSE",  hue: "#2E2A3A", url: "https://www.ssense.com/en-us/men/sale/designers/cp-company" },
+    { n: "C.P. Company",  off: 50, store: "END.",    hue: "#3A3226", url: "https://www.endclothing.com/us/sale/cp-company" },
+    { n: "Stone Island",  off: 40, store: "END.",    hue: "#22304E", url: "https://www.endclothing.com/us/sale/stone-island" },
+    { n: "Stone Island",  off: 40, store: "Giglio",  hue: "#2D4A3E", url: "https://www.giglio.com/en-us/stone-island/men.html" },
+    { n: "Menswear",      off: 60, store: "END.",    hue: "#4A3A32", url: "https://www.endclothing.com/us/sale/all-sale" },
+  ];
+
   // ——— Stan ———
   let catF = "Wszystko", season = "", minPct = 0, sort = "drop", brandF = "", q = "";
   let shown = 24;                 // ile produktów widać (doczytywane porcjami)
   const PORCJA = 24;
-  let sel = [];                   // indeksy wybranych produktów
+  let storeF = "";
+  let sel = [], recent = [];      // torba i ostatnio oglądane (zapisywane w przeglądarce)
+  try {
+    const z = JSON.parse(localStorage.getItem("drop_bag") || "[]");
+    if (Array.isArray(z)) sel = z.filter(i => PRODUCTS[i]);
+    const r = JSON.parse(localStorage.getItem("drop_recent") || "[]");
+    if (Array.isArray(r)) recent = r.filter(i => PRODUCTS[i]);
+  } catch (e) {}
+  const zapisz = () => { try {
+    localStorage.setItem("drop_bag", JSON.stringify(sel));
+    localStorage.setItem("drop_recent", JSON.stringify(recent));
+  } catch (e) {} };
   const cats = [...new Set(PRODUCTS.map(p => p.cat))].sort();
   const brands = [...new Set(PRODUCTS.map(p => p.brand))].sort();
 
@@ -357,6 +445,17 @@
       el.className = "chip"; el.dataset.b = b; el.textContent = b;
       el.onclick = () => { brandF = brandF === b ? "" : b; shown = PORCJA; render(); };
       bb.appendChild(el);
+    });
+  }
+
+  const stores = [...new Set(PRODUCTS.map(p => p.store))].sort();
+  if (stores.length > 1) {
+    const sb = document.getElementById("storeBar");
+    stores.forEach(st => {
+      const el = document.createElement("button");
+      el.className = "chip"; el.dataset.st = st; el.textContent = st;
+      el.onclick = () => { storeF = storeF === st ? "" : st; shown = PORCJA; render(); };
+      sb.appendChild(el);
     });
   }
 
@@ -388,7 +487,16 @@
 
   const overlay = document.getElementById("overlay"), sheet = document.getElementById("sheet");
   overlay.onclick = e => { if (e.target === overlay) overlay.classList.remove("open"); };
-  window.closeSheet = () => overlay.classList.remove("open");
+  window.closeSheet = () => {
+    overlay.classList.remove("open");
+    document.body.style.overflow = "";
+  };
+  const openSheet = () => {
+    overlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+    sheet.scrollTop = 0;
+    try { sheet.focus(); } catch (e) {}
+  };
 
   let toastT;
   function toast(msg) {
@@ -403,8 +511,10 @@
     const at = sel.indexOf(i);
     if (at >= 0) { sel.splice(at, 1); toast(T.removed); }
     else { sel.push(i); toast(PRODUCTS[i].brand + " — " + T.added); }
-    render(); updateBar();
+    zapisz(); render(); updateBar();
   };
+
+  window.clearBag = () => { sel = []; zapisz(); render(); updateBar(); closeSheet(); };
 
   function updateBar() {
     const bar = document.getElementById("bar");
@@ -449,13 +559,17 @@
            href="${esc(PRODUCTS[groups[store][0]].url)}" target="_blank" rel="noopener sponsored">
            ${fill(T.checkout, { store: esc(store), n: groups[store].length })}</a>`).join("")}
       <p style="font-size:11px;color:var(--faint);line-height:1.7;margin-top:18px;text-align:center">
-        ${T.bagNote}</p>`;
-    overlay.classList.add("open");
+        ${T.bagNote}</p>
+      <button class="share-b" onclick="shareBag()">${T.share}</button>
+      <button class="bag-clear" onclick="clearBag()">${T.clearBag}</button>`;
+    openSheet();
   }
 
   // ——— Karta produktu ———
   window.openProduct = i => {
     const p = PRODUCTS[i], inSel = sel.includes(i);
+    recent = [i, ...recent.filter(x => x !== i)].slice(0, 10);
+    zapisz(); renderRecent();
     sheet.innerHTML = `
       <div class="sheet-head"><h2 style="font-size:20px">${esc(p.brand)}</h2><button class="close" onclick="closeSheet()">${T.close}</button></div>
       ${imgHTML(p, "p-img")}
@@ -467,11 +581,11 @@
         <span style="font-family:var(--mono);font-size:12px;color:var(--accent)">−${pct(p)}%</span>
       </div>
       <p class="save">${fill(T.save, { x: price(p.oldPrice - p.price, p.currency) })} · ${esc(p.store)}</p>
+      <div class="verified">${esc(T.verified)}</div>
       <button class="cta dark" onclick="toggleSel(${i}); closeSheet();">${inSel ? T.remove : T.add}</button>
       <a class="cta outline" href="${esc(p.url)}" target="_blank" rel="noopener sponsored">${fill(T.buy, { store: esc(p.store) })}</a>
-      <p style="font-size:11px;color:var(--faint);line-height:1.7;margin-top:16px;text-align:center">
-        ${T.prodNote}</p>`;
-    overlay.classList.add("open");
+      <p class="ship">${T.prodNote}<br>${T.shipInfo}</p>`;
+    openSheet();
   };
 
   function render() {
@@ -484,16 +598,26 @@
     });
 
     document.querySelectorAll("#brandBar .chip").forEach(b => b.classList.toggle("on", b.dataset.b === brandF));
+    document.querySelectorAll("#storeBar .chip").forEach(b => b.classList.toggle("on", b.dataset.st === storeF));
 
     let list = PRODUCTS.map((p, i) => ({ ...p, _i: i })).filter(p =>
       (catF === "Wszystko" || p.cat === catF) &&
       (brandF === "" || p.brand === brandF) &&
+      (storeF === "" || p.store === storeF) &&
       (season === "" || (season === "lato" ? p.season === "lato" : p.season !== "lato")) &&
       pct(p) >= minPct &&
       (q === "" || (p.brand + " " + p.name + " " + (p.color || "") + " " + p.cat).toLowerCase().includes(q)));
     if (sort === "drop") list.sort((a, b) => pct(b) - pct(a));
     if (sort === "asc") list.sort((a, b) => zl(a.price, a.currency) - zl(b.price, b.currency));
     if (sort === "desc") list.sort((a, b) => zl(b.price, b.currency) - zl(a.price, a.currency));
+
+    const aktywne = catF !== "Wszystko" || brandF || storeF || season || minPct || q;
+    document.getElementById("clearWrap").innerHTML = aktywne
+      ? `<button class="clear-f" id="clearBtn">${esc(T.clearAll)}</button>` : "";
+    if (aktywne) document.getElementById("clearBtn").onclick = () => {
+      catF = "Wszystko"; brandF = ""; storeF = ""; season = ""; minPct = 0; q = "";
+      document.getElementById("q").value = ""; shown = PORCJA; render();
+    };
 
     const total = list.length;
     const widoczne = list.slice(0, shown);
@@ -509,7 +633,7 @@
     document.getElementById("grid").innerHTML = total === 0
       ? `<div class="empty">${T.none}</div>`
       : widoczne.map(p => `
-        <article class="card" onclick="openProduct(${p._i})">
+        <article class="card" onclick="openProduct(${p._i})" role="button" tabindex="0">
           <div class="thumb">
             ${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.brand)} ${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}
             ${illo(p)}
@@ -542,6 +666,47 @@
     applyLang(); render(); updateBar();
   };
 
+  // ——— Statystyki nad katalogiem ———
+  function renderStats() {
+    const n = PRODUCTS.length;
+    const sklepy = new Set(PRODUCTS.map(p => p.store)).size;
+    const sr = Math.round(PRODUCTS.reduce((a, p) => a + pct(p), 0) / n);
+    const max = Math.max(...PRODUCTS.map(p => pct(p)));
+    document.getElementById("stats").innerHTML = `
+      <div class="stat"><b>${n}</b><span>${esc(T.statProducts)}</span></div>
+      <div class="stat"><b>${sklepy}</b><span>${esc(T.statStores)}</span></div>
+      <div class="stat"><b>−${sr}%</b><span>${esc(T.statAvg)}</span></div>
+      <div class="stat"><b>−${max}%</b><span>${esc(T.statMax)}</span></div>`;
+  }
+
+  function renderRecent() {
+    const w = document.getElementById("recentWrap"), r = document.getElementById("recentRow");
+    if (!recent.length) { w.style.display = "none"; return; }
+    w.style.display = "block";
+    r.innerHTML = recent.map(i => { const p = PRODUCTS[i]; return `
+      <article class="r-card" onclick="openProduct(${i})">
+        <div class="thumb">
+          ${p.img ? `<img src="${esc(p.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}
+          ${illo(p)}<span class="badge">−${pct(p)}%</span>
+        </div>
+        <div class="r-b">
+          <div class="brand">${esc(p.brand)}</div>
+          <div class="nm">${esc(p.name)}</div>
+          <div class="pnew">${price(p.price, p.currency)}</div>
+        </div>
+      </article>`; }).join("");
+  }
+
+  function renderBrands() {
+    document.getElementById("brandGrid").innerHTML = BRAND_SALES.map(b => `
+      <a class="brand-c" href="${esc(b.url)}" target="_blank" rel="noopener sponsored"
+         style="background:linear-gradient(145deg, ${b.hue}, #0C0A08)">
+        <span class="b-off">${fill(T.upTo, { x: b.off })}</span>
+        <h3>${esc(b.n)}</h3>
+        <span class="b-store">${esc(b.store)} →</span>
+      </a>`).join("");
+  }
+
   function applyLang() {
     document.documentElement.lang = lang;
     const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
@@ -552,7 +717,11 @@
     set("tSummer", T.summer); set("tOuter", T.outer);
     set("tOff30", T.off30); set("tOff40", T.off40);
     set("tFooter", T.footer);
+    set("tBrandsTitle", T.brandsTitle); set("tBrandsLead", T.brandsLead);
+    set("tRecent", T.recent);
+    renderStats(); renderBrands(); renderRecent();
     set("tContact", T.contact);
+    set("tPrivacy", T.privacy);
     document.getElementById("q").placeholder = T.search;
     // nowe sekcje
     set("tWhyTitle", T.whyTitle);
@@ -584,6 +753,31 @@
       .then(() => { af.style.display = "none"; document.getElementById("alertOk").style.display = "block"; })
       .catch(() => { af.style.display = "none"; document.getElementById("alertOk").style.display = "block"; });
   });
+
+  // ——— Powrót na górę ———
+  const tt = document.getElementById("toTop");
+  tt.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  let ttT;
+  window.addEventListener("scroll", () => {
+    clearTimeout(ttT);
+    ttT = setTimeout(() => tt.classList.toggle("show", window.scrollY > 900), 80);
+  }, { passive: true });
+
+  // ——— Klawiatura: Esc zamyka panel ———
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && overlay.classList.contains("open")) closeSheet();
+  });
+
+  // ——— Udostępnianie torby ———
+  window.shareBag = async () => {
+    const lista = sel.map(i => `${PRODUCTS[i].brand} ${PRODUCTS[i].name} — ${price(PRODUCTS[i].price, PRODUCTS[i].currency)}`).join("\n");
+    const tekst = "DROP\n" + lista + "\n" + location.href;
+    try {
+      if (navigator.share) { await navigator.share({ title: "DROP", text: tekst }); return; }
+      await navigator.clipboard.writeText(tekst);
+      toast(T.shareCopied);
+    } catch (e) {}
+  };
 
   applyLang(); render(); updateBar();
 })();
