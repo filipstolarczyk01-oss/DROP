@@ -36,6 +36,9 @@
   .head-top { display: flex; align-items: center; justify-content: space-between; padding: 20px 22px 14px; }
   .logo { font-family: var(--serif); font-size: 30px; font-weight: 400; letter-spacing: 7px; text-indent: 7px; }
   .logo i { font-style: normal; color: var(--accent); font-size: 22px; letter-spacing: 0; }
+  .head-r { display: flex; align-items: center; gap: 14px; }
+  #lang { border: none; border-bottom: 1px solid var(--line); background: transparent; font-family: var(--mono);
+    font-size: 10px; letter-spacing: 1.5px; color: var(--muted); padding: 3px 2px; text-transform: uppercase; }
   .live { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; color: var(--faint); }
   .live b { color: var(--accent); font-weight: 400; }
   nav { display: flex; gap: 22px; overflow-x: auto; padding: 0 22px 12px; scrollbar-width: none; }
@@ -148,31 +151,34 @@
 <header>
   <div class="head-top">
     <div class="logo">DROP<i>↓</i></div>
-    <div class="live"><b>●</b> AKTUALIZACJA DZIŚ</div>
+    <div class="head-r">
+      <select id="lang" aria-label="Language"></select>
+      <div class="live"><b>●</b> <span id="liveTxt"></span></div>
+    </div>
   </div>
   <nav id="catNav"></nav>
 </header>
 
 <section class="hero">
-  <p class="eyebrow">Kuratorowana selekcja przecen</p>
-  <h1>Luksus<br><em>w cenie okazji</em></h1>
-  <p>Ręcznie wybrane przeceny z najlepszych sklepów świata. Kolekcja letnia i okrycia wierzchnie — w jednym miejscu, bez przeszukiwania dziesiątek stron.</p>
+  <p class="eyebrow" id="tEyebrow"></p>
+  <h1 id="tH1"></h1>
+  <p id="tLead"></p>
   <div class="rule"></div>
 </section>
 
 <div class="search-wrap">
-  <input id="q" type="search" placeholder="Szukaj marki lub modelu..." autocomplete="off">
+  <input id="q" type="search" placeholder="" autocomplete="off">
 </div>
 <div class="filters" id="brandBar"></div>
 <div class="filters">
-  <button class="chip" data-s="lato">Lato</button>
-  <button class="chip" data-s="zima">Okrycia</button>
-  <button class="chip" data-p="30">−30% i więcej</button>
-  <button class="chip" data-p="40">−40% i więcej</button>
+  <button class="chip" data-s="lato" id="tSummer"></button>
+  <button class="chip" data-s="zima" id="tOuter"></button>
+  <button class="chip" data-p="30" id="tOff30"></button>
+  <button class="chip" data-p="40" id="tOff40"></button>
   <select id="sortSel">
-    <option value="drop">Największa przecena</option>
-    <option value="asc">Cena rosnąco</option>
-    <option value="desc">Cena malejąco</option>
+    <option value="drop"></option>
+    <option value="asc"></option>
+    <option value="desc"></option>
   </select>
 </div>
 <div class="count" id="count"></div>
@@ -182,25 +188,43 @@
 
 <footer>
   <span class="fl">DROP</span>
-  Kuratorowany przegląd przecen mody luksusowej. Ceny pochodzą ze sklepów partnerskich i mogą ulec zmianie —
-  wiążąca jest zawsze cena w sklepie. Kwoty zagraniczne przeliczane na złotówki po kursie orientacyjnym.
-  Serwis zawiera linki afiliacyjne: kupując przez nie, wspierasz rozwój DROP bez dodatkowych kosztów.
+  <span id="tFooter"></span>
 </footer>
 
 <div class="bar" id="bar">
   <div class="bar-l" id="barText"></div>
-  <button id="barBtn">Zobacz torbę</button>
+  <button id="barBtn"></button>
 </div>
 
 <div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
 
+<script src="i18n.js"></script>
 <script src="products.js"></script>
 <script>
 (function () {
-  // ——— KURSY WALUT (aktualizuj co jakiś czas) ———
-  const KURS = { USD: 3.75, EUR: 4.25, GBP: 5.05, PLN: 1 };
-  const zl = (n, c) => Math.round(n * (KURS[c] || 1));
-  const price = (n, c) => zl(n, c).toLocaleString("pl-PL") + " zł";
+  // ——— KURSY WALUT — wszystko liczone względem złotówki ———
+  const KURS = { USD: 3.75, EUR: 4.25, GBP: 5.05, PLN: 1 };   // ile zł kosztuje 1 jednostka
+  const ZNAK = { PLN: { s: " zł", p: false }, EUR: { s: " €", p: false },
+                 GBP: { s: "£", p: true }, USD: { s: "$", p: true } };
+
+  // Język: zapamiętany > z przeglądarki > polski
+  let lang = "pl";
+  try { const z = localStorage.getItem("drop_lang"); if (z && I18N[z]) lang = z; else {
+    const b = (navigator.language || "pl").slice(0, 2); if (I18N[b]) lang = b; } } catch (e) {}
+  let T = I18N[lang];
+
+  // Cena: z waluty produktu -> na złotówki -> na walutę języka
+  const zl = (n, c) => n * (KURS[c] || 1);                    // wartość w zł (do sortowania i sum)
+  const wCur = n => n / (KURS[T.cur] || 1);                   // zł -> waluta języka
+  function fmt(vZl) {
+    const v = Math.round(wCur(vZl)), z = ZNAK[T.cur] || ZNAK.PLN;
+    const t = v.toLocaleString(T.locale);
+    return z.p ? z.s + t : t + z.s;
+  }
+  const price = (n, c) => fmt(zl(n, c));
+  const cat = c => (T.cats && T.cats[c]) || c;
+  const plural = n => n === 1 ? T.item1 : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? T.item2 : T.item5;
+  const fill = (str, o) => str.replace(/\{(\w+)\}/g, (_, k) => o[k]);
   const pct = p => Math.round((1 - p.price / p.oldPrice) * 100);
   const esc = s => String(s || "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 
@@ -282,7 +306,7 @@
   const nav = document.getElementById("catNav");
   ["Wszystko", ...cats].forEach(c => {
     const b = document.createElement("button");
-    b.textContent = c; b.onclick = () => { catF = c; shown = PORCJA; render(); };
+    b.dataset.c = c; b.onclick = () => { catF = c; shown = PORCJA; render(); };
     nav.appendChild(b);
   });
 
@@ -314,8 +338,8 @@
   window.toggleSel = (i, ev) => {
     if (ev) ev.stopPropagation();
     const at = sel.indexOf(i);
-    if (at >= 0) { sel.splice(at, 1); toast("Usunięto z torby"); }
-    else { sel.push(i); toast(esc(PRODUCTS[i].brand) + " — dodano do torby"); }
+    if (at >= 0) { sel.splice(at, 1); toast(T.removed); }
+    else { sel.push(i); toast(PRODUCTS[i].brand + " — " + T.added); }
     render(); updateBar();
   };
 
@@ -325,8 +349,8 @@
     const tot = sel.reduce((s, i) => s + zl(PRODUCTS[i].price, PRODUCTS[i].currency), 0);
     const sav = sel.reduce((s, i) => s + zl(PRODUCTS[i].oldPrice - PRODUCTS[i].price, PRODUCTS[i].currency), 0);
     document.getElementById("barText").innerHTML =
-      sel.length + (sel.length === 1 ? " produkt" : sel.length < 5 ? " produkty" : " produktów") +
-      " · " + tot.toLocaleString("pl-PL") + " zł<br><b>oszczędzasz " + sav.toLocaleString("pl-PL") + " zł</b>";
+      sel.length + " " + plural(sel.length) + " · " + fmt(tot) +
+      "<br><b>" + T.saveBar + " " + fmt(sav) + "</b>";
     bar.classList.add("show");
   }
   document.getElementById("barBtn").onclick = openSel;
@@ -338,7 +362,7 @@
     const sav = sel.reduce((s, i) => s + zl(PRODUCTS[i].oldPrice - PRODUCTS[i].price, PRODUCTS[i].currency), 0);
 
     sheet.innerHTML = `
-      <div class="sheet-head"><h2>Twoja torba</h2><button class="close" onclick="closeSheet()">Zamknij</button></div>
+      <div class="sheet-head"><h2>${T.bagTitle}</h2><button class="close" onclick="closeSheet()">${T.close}</button></div>
       ${Object.keys(groups).map(store => `
         <div class="store-group">${esc(store)}</div>
         ${groups[store].map(i => { const p = PRODUCTS[i]; return `
@@ -351,18 +375,18 @@
             </div>
             <div style="text-align:right">
               <div class="pnew">${price(p.price, p.currency)}</div>
-              <button class="row-x" onclick="toggleSel(${i}, event)">usuń</button>
+              <button class="row-x" onclick="toggleSel(${i}, event)">${T.rm}</button>
             </div>
           </div>`; }).join("")}
       `).join("")}
-      <div class="totals"><span>Razem</span><b>${tot.toLocaleString("pl-PL")} zł</b></div>
-      <div class="saved">Oszczędzasz ${sav.toLocaleString("pl-PL")} zł względem cen regularnych</div>
+      <div class="totals"><span>${T.total}</span><b>${fmt(tot)}</b></div>
+      <div class="saved">${fill(T.saved, { x: fmt(sav) })}</div>
       ${Object.keys(groups).map(store => `
         <a class="cta ${store === Object.keys(groups)[0] ? "" : "outline"}" style="margin-top:10px"
            href="${esc(PRODUCTS[groups[store][0]].url)}" target="_blank" rel="noopener sponsored">
-           Sfinalizuj w ${esc(store)} — ${groups[store].length} szt.</a>`).join("")}
+           ${fill(T.checkout, { store: esc(store), n: groups[store].length })}</a>`).join("")}
       <p style="font-size:11px;color:var(--faint);line-height:1.7;margin-top:18px;text-align:center">
-        Torba to Twoja lista zakupowa w DROP. Finalizujesz ją w sklepie, który wysyła towar i obsługuje zwroty.</p>`;
+        ${T.bagNote}</p>`;
     overlay.classList.add("open");
   }
 
@@ -370,7 +394,7 @@
   window.openProduct = i => {
     const p = PRODUCTS[i], inSel = sel.includes(i);
     sheet.innerHTML = `
-      <div class="sheet-head"><h2 style="font-size:20px">${esc(p.brand)}</h2><button class="close" onclick="closeSheet()">Zamknij</button></div>
+      <div class="sheet-head"><h2 style="font-size:20px">${esc(p.brand)}</h2><button class="close" onclick="closeSheet()">${T.close}</button></div>
       ${imgHTML(p, "p-img")}
       <div style="font-family:var(--serif);font-size:27px;line-height:1.15">${esc(p.name)}</div>
       <div class="color" style="margin-top:6px">${esc(p.color || "")}</div>
@@ -379,16 +403,19 @@
         <span class="pold">${price(p.oldPrice, p.currency)}</span>
         <span style="font-family:var(--mono);font-size:12px;color:var(--accent)">−${pct(p)}%</span>
       </div>
-      <p class="save">Oszczędzasz ${price(p.oldPrice - p.price, p.currency)} · ${esc(p.store)}</p>
-      <button class="cta dark" onclick="toggleSel(${i}); closeSheet();">${inSel ? "Usuń z torby" : "Dodaj do torby"}</button>
-      <a class="cta outline" href="${esc(p.url)}" target="_blank" rel="noopener sponsored">Kup w ${esc(p.store)}</a>
+      <p class="save">${fill(T.save, { x: price(p.oldPrice - p.price, p.currency) })} · ${esc(p.store)}</p>
+      <button class="cta dark" onclick="toggleSel(${i}); closeSheet();">${inSel ? T.remove : T.add}</button>
+      <a class="cta outline" href="${esc(p.url)}" target="_blank" rel="noopener sponsored">${fill(T.buy, { store: esc(p.store) })}</a>
       <p style="font-size:11px;color:var(--faint);line-height:1.7;margin-top:16px;text-align:center">
-        Rozmiary i dostępność sprawdzisz w sklepie. Cena w sklepie jest wiążąca.</p>`;
+        ${T.prodNote}</p>`;
     overlay.classList.add("open");
   };
 
   function render() {
-    document.querySelectorAll("#catNav button").forEach(b => b.classList.toggle("on", b.textContent === catF));
+    document.querySelectorAll("#catNav button").forEach(b => {
+      b.textContent = b.dataset.c === "Wszystko" ? T.all : cat(b.dataset.c);
+      b.classList.toggle("on", b.dataset.c === catF);
+    });
     document.querySelectorAll(".filters .chip").forEach(b => {
       b.classList.toggle("on", (b.dataset.s && b.dataset.s === season) || (b.dataset.p && +b.dataset.p === minPct));
     });
@@ -408,16 +435,16 @@
     const total = list.length;
     const widoczne = list.slice(0, shown);
     document.getElementById("count").textContent =
-      total === 0 ? "" : (total <= shown ? total + " PRODUKTÓW" : widoczne.length + " Z " + total + " PRODUKTÓW");
+      total === 0 ? "" : (total <= shown ? total + " " + T.products : widoczne.length + " " + T.of + " " + total + " " + T.products);
 
     const mw = document.getElementById("moreWrap");
     mw.innerHTML = total > shown
-      ? `<button class="more" id="moreBtn">Pokaż kolejne ${Math.min(PORCJA, total - shown)}</button>`
+      ? `<button class="more" id="moreBtn">${T.more} +${Math.min(PORCJA, total - shown)}</button>`
       : "";
     if (total > shown) document.getElementById("moreBtn").onclick = () => { shown += PORCJA; render(); };
 
     document.getElementById("grid").innerHTML = total === 0
-      ? '<div class="empty">Brak produktów dla wybranych filtrów</div>'
+      ? `<div class="empty">${T.none}</div>`
       : widoczne.map(p => `
         <article class="card" onclick="openProduct(${p._i})">
           <div class="thumb">
@@ -438,7 +465,41 @@
         </article>`).join("");
   }
 
-  render(); updateBar();
+  // ——— Przełącznik języka ———
+  const sel_lang = document.getElementById("lang");
+  Object.keys(I18N).forEach(k => {
+    const o = document.createElement("option");
+    o.value = k; o.textContent = I18N[k].label;
+    sel_lang.appendChild(o);
+  });
+  sel_lang.value = lang;
+  sel_lang.onchange = e => {
+    lang = e.target.value; T = I18N[lang];
+    try { localStorage.setItem("drop_lang", lang); } catch (err) {}
+    applyLang(); render(); updateBar();
+  };
+
+  function applyLang() {
+    document.documentElement.lang = lang;
+    const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+    set("liveTxt", T.live);
+    set("tEyebrow", T.eyebrow);
+    document.getElementById("tH1").innerHTML = esc(T.h1a) + "<br><em>" + esc(T.h1b) + "</em>";
+    set("tLead", T.lead);
+    set("tSummer", T.summer); set("tOuter", T.outer);
+    set("tOff30", T.off30); set("tOff40", T.off40);
+    set("tFooter", T.footer);
+    document.getElementById("q").placeholder = T.search;
+    document.getElementById("barBtn").textContent = T.bagBtn;
+    const so = document.getElementById("sortSel").options;
+    so[0].textContent = T.sortDrop; so[1].textContent = T.sortAsc; so[2].textContent = T.sortDesc;
+    document.querySelectorAll(".add").forEach(b => b.setAttribute("aria-label", T.add));
+    // pasek przecen
+    document.getElementById("ticker").innerHTML = [...hot, ...hot, ...hot].map(p =>
+      `<span class="tick-item"><span class="tick-pct">−${pct(p)}%</span>${esc(p.brand)} ${esc(p.name)}<span class="tick-dot">●</span></span>`).join("");
+  }
+
+  applyLang(); render(); updateBar();
 })();
 </script>
 </body>
