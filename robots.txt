@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Podmień adres na własny po podpięciu domeny
-Sitemap: https://twoja-domena.pl/sitemap.xml
+Sitemap: https://dropdealzzz.com/sitemap.xml
