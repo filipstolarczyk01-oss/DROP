@@ -32,7 +32,7 @@
 
   /* Pasek przecen */
   .ticker { background: var(--ink); color: #EDE7DC; overflow: hidden; padding: 9px 0; font-family: var(--mono); font-size: 11px; }
-  .marquee { display: inline-flex; white-space: nowrap; animation: scroll 42s linear infinite; }
+  .marquee { display: inline-flex; white-space: nowrap; animation: scroll linear infinite; }
   @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
   .tick-item { margin: 0 10px; letter-spacing: 1px; }
@@ -249,7 +249,6 @@
   <div class="stats" id="stats"></div>
 </section>
 
-<div id="katalogTop"></div>
 <div class="search-wrap">
   <input id="q" type="search" placeholder="" autocomplete="off">
 </div>
@@ -269,6 +268,7 @@
     <option value="name"></option>
   </select>
 </div>
+<div id="katalogTop"></div>
 <div class="count" id="count"></div>
 <div style="text-align:center" id="clearWrap"></div>
 
@@ -781,8 +781,13 @@
     so[4].textContent = T.sortBrand; so[5].textContent = T.sortName;
     document.querySelectorAll(".add").forEach(b => b.setAttribute("aria-label", T.add));
     // pasek przecen
-    document.getElementById("ticker").innerHTML = [...hot, ...hot, ...hot].map(p =>
+    // Pasek: 15 największych przecen, dwie kopie (płynna pętla przy przesunięciu -50%),
+    // a czas animacji rośnie z liczbą pozycji, żeby tempo czytania było stałe.
+    const napasek = [...hot].sort((a, b) => pct(b) - pct(a)).slice(0, 15);
+    const tk = document.getElementById("ticker");
+    tk.innerHTML = [...napasek, ...napasek].map(p =>
       `<span class="tick-item"><span class="tick-pct">−${pct(p)}%</span>${esc(p.brand)} ${esc(p.name)}<span class="tick-dot">●</span></span>`).join("");
+    tk.style.animationDuration = (napasek.length * 6) + "s";
   }
 
   // ——— Zapis na alerty (obsługa przez Netlify Forms) ———
