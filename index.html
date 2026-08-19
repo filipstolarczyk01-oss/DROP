@@ -254,7 +254,7 @@
 </div>
 <div class="filters" id="brandBar"></div>
 <div class="filters" id="storeBar"></div>
-<div class="filters">
+<div class="filters" id="mainFilters">
   <button class="chip" data-s="lato" id="tSummer"></button>
   <button class="chip" data-s="zima" id="tOuter"></button>
   <button class="chip" data-p="30" id="tOff30"></button>
@@ -361,7 +361,8 @@
   // ——— Ilustracja, gdy produkt nie ma jeszcze zdjęcia ———
   const HUE = { "Kurtki": "#2E3A4E", "Kurtki puchowe": "#1F2C45", "Parki": "#7A6A4E", "Kamizelki": "#2A3040",
     "Overshirty": "#3E5C82", "Bluzy": "#37628F", "Koszule": "#4A6A8A", "Spodnie": "#454F63",
-    "Polo": "#8C8574", "T-shirty": "#9A8F7A", "Kąpielówki": "#5B7C8C", "Buty": "#8A8172", "Swetry": "#9C9484" };
+    "Polo": "#8C8574", "T-shirty": "#9A8F7A", "Kąpielówki": "#5B7C8C", "Buty": "#8A8172",
+    "Swetry": "#7D6E5A", "Szorty": "#6B7A5C", "Akcesoria": "#3B3B42" };
   const shade = (hex, f) => { const n = parseInt(hex.slice(1), 16);
     const c = v => Math.max(0, Math.min(255, Math.round(v * f)));
     return "rgb(" + c(n >> 16) + "," + c((n >> 8) & 255) + "," + c(n & 255) + ")"; };
@@ -375,7 +376,13 @@
       <path d="M28 160 L202 160 Q208 168 200 172 L34 172 Q26 168 28 160 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>
       <path d="M56 116 Q70 126 78 140 M72 112 Q86 122 94 136 M88 116 Q100 126 108 138" stroke="${line}" stroke-width="2" fill="none"/>
       <circle cx="168" cy="146" r="7" fill="${lite}" stroke="${line}" stroke-width="2"/></svg>`;
-    if (/kąpiel|short/.test(c)) return `<svg viewBox="0 0 240 240" width="66%" style="position:relative;z-index:1">
+    if (/akcesor|torb|plecak|bag/.test(c)) return `<svg viewBox="0 0 240 240" width="64%" style="position:relative;z-index:1">
+      <path d="M92 74 Q92 44 120 44 Q148 44 148 74" stroke="${line}" stroke-width="5" fill="none"/>
+      <path d="M62 74 L178 74 Q188 74 190 86 L200 196 Q202 210 188 210 L52 210 Q38 210 40 196 L50 86 Q52 74 62 74 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
+      <path d="M50 108 L190 108" stroke="${line}" stroke-width="2.5"/>
+      <rect x="104" y="136" width="32" height="26" rx="3" fill="${lite}" stroke="${line}" stroke-width="2.5"/>
+      <circle cx="120" cy="149" r="4" fill="${line}"/></svg>`;
+    if (/szort|kąpiel|short|bermud/.test(c)) return `<svg viewBox="0 0 240 240" width="66%" style="position:relative;z-index:1">
       <path d="M72 40 L168 40 L176 96 Q178 140 172 176 L130 176 Q126 140 120 116 Q114 140 110 176 L68 176 Q62 140 64 96 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
       <path d="M72 40 L168 40 L170 58 L70 58 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>
       <path d="M108 44 Q120 54 132 44" stroke="${line}" stroke-width="2" fill="none"/></svg>`;
@@ -384,7 +391,8 @@
       <path d="M78 34 L162 34 L164 54 L76 54 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>
       <path d="M84 62 l24 6 l-3 30 l-24 -6 Z M156 62 l-24 6 l3 30 l24 -6 Z" fill="${lite}" stroke="${line}" stroke-width="2"/></svg>`;
     const polo = /polo|t-shirt|koszul/.test(c), krotki = polo;
-    const kaptur = /puch|park|bluz/.test(c), dlugi = /park|overshirt/.test(c), kam = /kamizel/.test(c);
+    const swetr = /swetr|dzianin|pulower/.test(c);
+    const kaptur = /puch|park|bluz|hoodie/.test(c), dlugi = /park|overshirt/.test(c), kam = /kamizel/.test(c);
     const pik = /puch|kamizel/.test(c), dol = dlugi ? 268 : (krotki ? 226 : 248);
     return `<svg viewBox="0 0 240 300" width="72%" style="position:relative;z-index:1">
       <path d="M120 10 L120 26" stroke="#B0A895" stroke-width="2.5"/><circle cx="120" cy="8" r="5" stroke="#B0A895" stroke-width="2.5" fill="none"/>
@@ -398,10 +406,12 @@
            <path d="M162 62 Q188 78 196 150 Q198 168 192 184 L166 176 Q170 130 156 92 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>`}
       <path d="M84 58 Q120 46 156 58 L162 96 Q166 160 160 ${dol} Q120 ${dol + 12} 80 ${dol} Q74 160 78 96 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
       ${polo ? `<path d="M120 68 L120 108" stroke="${line}" stroke-width="2"/><circle cx="120" cy="80" r="2.5" fill="${line}"/><circle cx="120" cy="96" r="2.5" fill="${line}"/>`
+        : swetr ? `<path d="M96 56 Q120 74 144 56" stroke="${line}" stroke-width="2.5" fill="none"/>
+             <path d="M88 96 L152 96 M88 132 L152 132 M88 168 L152 168" stroke="${line}" stroke-width="1.4" opacity=".5"/>`
         : `<path d="M120 58 L120 ${dol + 4}" stroke="${line}" stroke-width="2" stroke-dasharray="1 4"/>`}
       ${pik ? [96,124,152,180,208].map(y => `<path d="M80 ${y} Q120 ${y+10} 160 ${y}" stroke="${line}" stroke-width="1.6" opacity=".7" fill="none"/>`).join("") : ""}
-      ${polo ? "" : `<path d="M88 ${dol-52} l22 4 l-2 26 l-22 -4 Z M152 ${dol-52} l-22 4 l2 26 l22 -4 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>`}
-      ${kam || krotki ? "" : `<rect x="52" y="118" width="17" height="21" rx="3" fill="${lite}" stroke="${line}" stroke-width="2" transform="rotate(-8 60 128)"/>`}
+      ${polo || swetr ? "" : `<path d="M88 ${dol-52} l22 4 l-2 26 l-22 -4 Z M152 ${dol-52} l-22 4 l2 26 l22 -4 Z" fill="${lite}" stroke="${line}" stroke-width="2"/>`}
+      ${kam || krotki || swetr ?  "" : `<rect x="52" y="118" width="17" height="21" rx="3" fill="${lite}" stroke="${line}" stroke-width="2" transform="rotate(-8 60 128)"/>`}
     </svg>`;
   }
 
@@ -473,7 +483,7 @@
     nav.appendChild(b);
   });
 
-  document.querySelectorAll(".filters .chip").forEach(b => {
+  document.querySelectorAll("#mainFilters .chip").forEach(b => {
     b.onclick = () => {
       if (b.dataset.s) season = season === b.dataset.s ? "" : b.dataset.s;
       if (b.dataset.p) minPct = minPct === +b.dataset.p ? 0 : +b.dataset.p;
@@ -592,14 +602,16 @@
   function render() {
     document.querySelectorAll("#catNav button").forEach(b => {
       b.textContent = b.dataset.c === "Wszystko" ? T.all : cat(b.dataset.c);
-      b.classList.toggle("on", b.dataset.c === catF);
+      b.classList.toggle("on", Boolean(b.dataset.c === catF));
     });
-    document.querySelectorAll(".filters .chip").forEach(b => {
-      b.classList.toggle("on", (b.dataset.s && b.dataset.s === season) || (b.dataset.p && +b.dataset.p === minPct));
+    document.querySelectorAll("#mainFilters .chip").forEach(b => {
+      const on = (b.dataset.s !== undefined && b.dataset.s === season)
+              || (b.dataset.p !== undefined && +b.dataset.p === minPct);
+      b.classList.toggle("on", Boolean(on));
     });
 
-    document.querySelectorAll("#brandBar .chip").forEach(b => b.classList.toggle("on", b.dataset.b === brandF));
-    document.querySelectorAll("#storeBar .chip").forEach(b => b.classList.toggle("on", b.dataset.st === storeF));
+    document.querySelectorAll("#brandBar .chip").forEach(b => b.classList.toggle("on", Boolean(b.dataset.b === brandF)));
+    document.querySelectorAll("#storeBar .chip").forEach(b => b.classList.toggle("on", Boolean(b.dataset.st === storeF)));
 
     let list = PRODUCTS.map((p, i) => ({ ...p, _i: i })).filter(p =>
       (catF === "Wszystko" || p.cat === catF) &&
