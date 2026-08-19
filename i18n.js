@@ -127,7 +127,7 @@ const I18N = {
     verified: "Price verified",
     clearAll: "Clear filters",
     privacy: "Privacy policy",
-    cats: { "Kurtki": "Jackets", "Kurtki puchowe": "Down jackets", "Parki": "Parkas", "Kamizelki": "Gilets",
+    cats: { "Szorty": "Shorts", "Akcesoria": "Accessories", "Okrycia wierzchnie": "Outerwear", "Bluzy i dzianina": "Sweats & knitwear", "Koszulki i polo": "T-shirts & polos", "Spodnie i szorty": "Trousers & shorts", "Akcesoria i buty": "Accessories & shoes", "Kurtki": "Jackets", "Kurtki puchowe": "Down jackets", "Parki": "Parkas", "Kamizelki": "Gilets",
       "Overshirty": "Overshirts", "Bluzy": "Hoodies", "Koszule": "Shirts", "Spodnie": "Trousers",
       "Polo": "Polos", "T-shirty": "T-shirts", "Kąpielówki": "Swim shorts", "Buty": "Shoes", "Swetry": "Knitwear" } },
 
@@ -191,7 +191,7 @@ const I18N = {
     verified: "Prix vérifié",
     clearAll: "Effacer les filtres",
     privacy: "Politique de confidentialité",
-    cats: { "Kurtki": "Vestes", "Kurtki puchowe": "Doudounes", "Parki": "Parkas", "Kamizelki": "Gilets",
+    cats: { "Szorty": "Shorts", "Akcesoria": "Accessoires", "Okrycia wierzchnie": "Vestes et manteaux", "Bluzy i dzianina": "Sweats et mailles", "Koszulki i polo": "T-shirts et polos", "Spodnie i szorty": "Pantalons et shorts", "Akcesoria i buty": "Accessoires et chaussures", "Kurtki": "Vestes", "Kurtki puchowe": "Doudounes", "Parki": "Parkas", "Kamizelki": "Gilets",
       "Overshirty": "Surchemises", "Bluzy": "Sweats à capuche", "Koszule": "Chemises", "Spodnie": "Pantalons",
       "Polo": "Polos", "T-shirty": "T-shirts", "Kąpielówki": "Maillots de bain", "Buty": "Chaussures", "Swetry": "Mailles" } },
 
@@ -255,7 +255,7 @@ const I18N = {
     verified: "Preis geprüft",
     clearAll: "Filter zurücksetzen",
     privacy: "Datenschutz",
-    cats: { "Kurtki": "Jacken", "Kurtki puchowe": "Daunenjacken", "Parki": "Parkas", "Kamizelki": "Westen",
+    cats: { "Szorty": "Shorts", "Akcesoria": "Accessoires", "Okrycia wierzchnie": "Oberbekleidung", "Bluzy i dzianina": "Sweats & Strick", "Koszulki i polo": "T-Shirts & Polos", "Spodnie i szorty": "Hosen & Shorts", "Akcesoria i buty": "Accessoires & Schuhe", "Kurtki": "Jacken", "Kurtki puchowe": "Daunenjacken", "Parki": "Parkas", "Kamizelki": "Westen",
       "Overshirty": "Overshirts", "Bluzy": "Hoodies", "Koszule": "Hemden", "Spodnie": "Hosen",
       "Polo": "Polos", "T-shirty": "T-Shirts", "Kąpielówki": "Badeshorts", "Buty": "Schuhe", "Swetry": "Strick" } },
 
@@ -319,7 +319,7 @@ const I18N = {
     verified: "Prezzo verificato",
     clearAll: "Cancella i filtri",
     privacy: "Informativa sulla privacy",
-    cats: { "Kurtki": "Giacche", "Kurtki puchowe": "Piumini", "Parki": "Parka", "Kamizelki": "Gilet",
+    cats: { "Szorty": "Shorts", "Akcesoria": "Accessori", "Okrycia wierzchnie": "Capispalla", "Bluzy i dzianina": "Felpe e maglieria", "Koszulki i polo": "T-shirt e polo", "Spodnie i szorty": "Pantaloni e shorts", "Akcesoria i buty": "Accessori e scarpe", "Kurtki": "Giacche", "Kurtki puchowe": "Piumini", "Parki": "Parka", "Kamizelki": "Gilet",
       "Overshirty": "Overshirt", "Bluzy": "Felpe", "Koszule": "Camicie", "Spodnie": "Pantaloni",
       "Polo": "Polo", "T-shirty": "T-shirt", "Kąpielówki": "Costumi", "Buty": "Scarpe", "Swetry": "Maglieria" } },
 
@@ -383,7 +383,7 @@ const I18N = {
     verified: "Precio verificado",
     clearAll: "Borrar filtros",
     privacy: "Política de privacidad",
-    cats: { "Kurtki": "Chaquetas", "Kurtki puchowe": "Plumíferos", "Parki": "Parkas", "Kamizelki": "Chalecos",
+    cats: { "Szorty": "Shorts", "Akcesoria": "Accesorios", "Okrycia wierzchnie": "Abrigos y chaquetas", "Bluzy i dzianina": "Sudaderas y punto", "Koszulki i polo": "Camisetas y polos", "Spodnie i szorty": "Pantalones y shorts", "Akcesoria i buty": "Accesorios y zapatos", "Kurtki": "Chaquetas", "Kurtki puchowe": "Plumíferos", "Parki": "Parkas", "Kamizelki": "Chalecos",
       "Overshirty": "Sobrecamisas", "Bluzy": "Sudaderas", "Koszule": "Camisas", "Spodnie": "Pantalones",
       "Polo": "Polos", "T-shirty": "Camisetas", "Kąpielówki": "Bañadores", "Buty": "Zapatos", "Swetry": "Punto" } },
 };

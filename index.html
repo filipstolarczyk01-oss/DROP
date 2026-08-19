@@ -367,8 +367,9 @@
     return "rgb(" + c(n >> 16) + "," + c((n >> 8) & 255) + "," + c(n & 255) + ")"; };
 
   function illo(p) {
-    const hue = HUE[p.cat] || "#3A4256", line = shade(hue, .55), lite = shade(hue, 1.28);
-    const c = (p.cat || "").toLowerCase();
+    const typ = p.sub || p.cat;
+    const hue = HUE[typ] || "#3A4256", line = shade(hue, .55), lite = shade(hue, 1.28);
+    const c = (typ || "").toLowerCase();
     if (/but|sneaker/.test(c)) return `<svg viewBox="0 0 240 200" width="76%" style="position:relative;z-index:1">
       <path d="M28 148 Q30 118 52 112 Q74 106 92 118 Q112 132 142 136 Q186 142 198 152 Q206 160 200 168 L36 168 Q26 164 28 148 Z" fill="${hue}" stroke="${line}" stroke-width="2.5"/>
       <path d="M28 160 L202 160 Q208 168 200 172 L34 172 Q26 168 28 160 Z" fill="${lite}" stroke="${line}" stroke-width="2.5"/>
@@ -574,7 +575,7 @@
       <div class="sheet-head"><h2 style="font-size:20px">${esc(p.brand)}</h2><button class="close" onclick="closeSheet()">${T.close}</button></div>
       ${imgHTML(p, "p-img")}
       <div style="font-family:var(--serif);font-size:27px;line-height:1.15">${esc(p.name)}</div>
-      <div class="color" style="margin-top:6px">${esc(p.color || "")}</div>
+      <div class="color" style="margin-top:6px">${esc([cat(p.sub), p.color].filter(Boolean).join(" · "))}</div>
       <div class="prices" style="margin-top:12px">
         <span class="pnew" style="font-size:22px">${price(p.price, p.currency)}</span>
         <span class="pold">${price(p.oldPrice, p.currency)}</span>
