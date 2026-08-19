@@ -261,8 +261,11 @@
   <button class="chip" data-p="40" id="tOff40"></button>
   <select id="sortSel">
     <option value="drop"></option>
+    <option value="save"></option>
     <option value="asc"></option>
     <option value="desc"></option>
+    <option value="brand"></option>
+    <option value="name"></option>
   </select>
 </div>
 <div class="count" id="count"></div>
@@ -624,9 +627,13 @@
       (season === "" || (season === "lato" ? p.season === "lato" : p.season !== "lato")) &&
       pct(p) >= minPct &&
       (q === "" || (p.brand + " " + p.name + " " + (p.color || "") + " " + p.cat).toLowerCase().includes(q)));
+    const osz = p => zl(p.oldPrice - p.price, p.currency);   // oszczędność w złotówkach
     if (sort === "drop") list.sort((a, b) => pct(b) - pct(a));
-    if (sort === "asc") list.sort((a, b) => zl(a.price, a.currency) - zl(b.price, b.currency));
+    if (sort === "save") list.sort((a, b) => osz(b) - osz(a));
+    if (sort === "asc")  list.sort((a, b) => zl(a.price, a.currency) - zl(b.price, b.currency));
     if (sort === "desc") list.sort((a, b) => zl(b.price, b.currency) - zl(a.price, a.currency));
+    if (sort === "brand") list.sort((a, b) => a.brand.localeCompare(b.brand, T.locale) || pct(b) - pct(a));
+    if (sort === "name") list.sort((a, b) => a.name.localeCompare(b.name, T.locale));
 
     const aktywne = catF !== "Wszystko" || brandF || storeF || season || minPct || q;
     document.getElementById("clearWrap").innerHTML = aktywne
@@ -754,7 +761,9 @@
       `<details><summary>${esc(T["q" + n])}</summary><p>${esc(T["a" + n])}</p></details>`).join("");
     document.getElementById("barBtn").textContent = T.bagBtn;
     const so = document.getElementById("sortSel").options;
-    so[0].textContent = T.sortDrop; so[1].textContent = T.sortAsc; so[2].textContent = T.sortDesc;
+    so[0].textContent = T.sortDrop; so[1].textContent = T.sortSave;
+    so[2].textContent = T.sortAsc;  so[3].textContent = T.sortDesc;
+    so[4].textContent = T.sortBrand; so[5].textContent = T.sortName;
     document.querySelectorAll(".add").forEach(b => b.setAttribute("aria-label", T.add));
     // pasek przecen
     document.getElementById("ticker").innerHTML = [...hot, ...hot, ...hot].map(p =>
