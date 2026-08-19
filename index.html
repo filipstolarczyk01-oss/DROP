@@ -72,6 +72,12 @@
     background: var(--paper); color: var(--ink); font-size: 15px; cursor: pointer; z-index: 35; opacity: 0;
     pointer-events: none; transition: opacity .25s; border-radius: 999px; }
   .totop.show { opacity: 1; pointer-events: auto; }
+  .active-wrap { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; padding: 4px 22px 14px; }
+  .act { display: inline-flex; align-items: center; gap: 8px; background: var(--ink); color: #EDE7DC;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 7px 10px 7px 12px; border: none; cursor: pointer; }
+  .act span { font-size: 13px; line-height: 1; opacity: .7; }
+  .act:hover span { opacity: 1; }
   .clear-f { background: none; border: none; color: var(--accent); font-size: 11px; letter-spacing: 1.5px;
     text-transform: uppercase; text-decoration: underline; cursor: pointer; font-family: var(--sans); padding: 8px 6px; }
   .verified { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 9px;
@@ -269,6 +275,7 @@
   </select>
 </div>
 <div id="katalogTop"></div>
+<div class="active-wrap" id="activeWrap"></div>
 <div class="count" id="count"></div>
 <div style="text-align:center" id="clearWrap"></div>
 
@@ -434,10 +441,10 @@
   ];
 
   // ——— Stan ———
-  let catF = "Wszystko", season = "", minPct = 0, sort = "drop", brandF = "", q = "";
+  let catF = "Wszystko", season = "", minPct = 0, sort = "drop", q = "";
+  let brandF = [], storeF = [];   // wielokrotny wybór
   let shown = 24;                 // ile produktów widać (doczytywane porcjami)
   const PORCJA = 24;
-  let storeF = "";
   let sel = [], recent = [];      // torba i ostatnio oglądane (zapisywane w przeglądarce)
   try {
     const z = JSON.parse(localStorage.getItem("drop_bag") || "[]");
@@ -462,7 +469,7 @@
     brands.slice(0, 14).forEach(b => {
       const el = document.createElement("button");
       el.className = "chip"; el.dataset.b = b; el.textContent = b;
-      el.onclick = () => { brandF = brandF === b ? "" : b; shown = PORCJA; render(); doKatalogu(); };
+      el.onclick = () => { brandF = brandF.includes(b) ? brandF.filter(x => x !== b) : [...brandF, b]; shown = PORCJA; render(); doKatalogu(); };
       bb.appendChild(el);
     });
   }
@@ -487,7 +494,7 @@
     stores.forEach(st => {
       const el = document.createElement("button");
       el.className = "chip"; el.dataset.st = st; el.textContent = st;
-      el.onclick = () => { storeF = storeF === st ? "" : st; shown = PORCJA; render(); doKatalogu(); };
+      el.onclick = () => { storeF = storeF.includes(st) ? storeF.filter(x => x !== st) : [...storeF, st]; shown = PORCJA; render(); doKatalogu(); };
       sb.appendChild(el);
     });
   }
@@ -632,13 +639,13 @@
       b.classList.toggle("on", Boolean(on));
     });
 
-    document.querySelectorAll("#brandBar .chip").forEach(b => b.classList.toggle("on", Boolean(b.dataset.b === brandF)));
-    document.querySelectorAll("#storeBar .chip").forEach(b => b.classList.toggle("on", Boolean(b.dataset.st === storeF)));
+    document.querySelectorAll("#brandBar .chip").forEach(b => b.classList.toggle("on", brandF.includes(b.dataset.b)));
+    document.querySelectorAll("#storeBar .chip").forEach(b => b.classList.toggle("on", storeF.includes(b.dataset.st)));
 
     let list = PRODUCTS.map((p, i) => ({ ...p, _i: i })).filter(p =>
       (catF === "Wszystko" || p.cat === catF) &&
-      (brandF === "" || p.brand === brandF) &&
-      (storeF === "" || p.store === storeF) &&
+      (brandF.length === 0 || brandF.includes(p.brand)) &&
+      (storeF.length === 0 || storeF.includes(p.store)) &&
       (season === "" || (season === "lato" ? p.season === "lato" : p.season !== "lato")) &&
       pct(p) >= minPct &&
       (q === "" || (p.brand + " " + p.name + " " + (p.color || "") + " " + p.cat).toLowerCase().includes(q)));
@@ -650,11 +657,34 @@
     if (sort === "brand") list.sort((a, b) => a.brand.localeCompare(b.brand, T.locale) || pct(b) - pct(a));
     if (sort === "name") list.sort((a, b) => a.name.localeCompare(b.name, T.locale));
 
-    const aktywne = catF !== "Wszystko" || brandF || storeF || season || minPct || q;
+    // ——— Plakietki aktywnych filtrów (każdą można zdjąć osobno) ———
+    const plakietki = [];
+    if (catF !== "Wszystko") plakietki.push({ t: cat(catF), f: "cat" });
+    brandF.forEach(b => plakietki.push({ t: b, f: "brand", v: b }));
+    storeF.forEach(st => plakietki.push({ t: st, f: "store", v: st }));
+    if (season) plakietki.push({ t: season === "lato" ? T.summer : T.outer, f: "season" });
+    if (minPct) plakietki.push({ t: "−" + minPct + "%+", f: "pct" });
+    if (q) plakietki.push({ t: "\u201C" + q + "\u201D", f: "q" });
+    document.getElementById("activeWrap").innerHTML = plakietki.map((z, i) =>
+      `<button class="act" data-i="${i}" title="${esc(T.removeFilter)}">${esc(z.t)}<span>&times;</span></button>`).join("");
+    document.querySelectorAll("#activeWrap .act").forEach(el => {
+      el.onclick = () => {
+        const z = plakietki[+el.dataset.i];
+        if (z.f === "cat") catF = "Wszystko";
+        if (z.f === "brand") brandF = brandF.filter(x => x !== z.v);
+        if (z.f === "store") storeF = storeF.filter(x => x !== z.v);
+        if (z.f === "season") season = "";
+        if (z.f === "pct") minPct = 0;
+        if (z.f === "q") { q = ""; document.getElementById("q").value = ""; }
+        shown = PORCJA; render();
+      };
+    });
+
+    const aktywne = catF !== "Wszystko" || brandF.length || storeF.length || season || minPct || q;
     document.getElementById("clearWrap").innerHTML = aktywne
       ? `<button class="clear-f" id="clearBtn">${esc(T.clearAll)}</button>` : "";
     if (aktywne) document.getElementById("clearBtn").onclick = () => {
-      catF = "Wszystko"; brandF = ""; storeF = ""; season = ""; minPct = 0; q = "";
+      catF = "Wszystko"; brandF = []; storeF = []; season = ""; minPct = 0; q = "";
       document.getElementById("q").value = ""; shown = PORCJA; render();
     };
 
