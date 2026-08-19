@@ -446,12 +446,16 @@
     localStorage.setItem("drop_recent", JSON.stringify(recent));
   } catch (e) {} };
   const cats = [...new Set(PRODUCTS.map(p => p.cat))].sort();
-  const brands = [...new Set(PRODUCTS.map(p => p.brand))].sort();
+  // marki uszeregowane wg liczby produktów — najważniejsze zawsze widoczne
+  const licznikMarek = {};
+  PRODUCTS.forEach(p => { licznikMarek[p.brand] = (licznikMarek[p.brand] || 0) + 1; });
+  const brands = Object.keys(licznikMarek).sort((a, b) =>
+    licznikMarek[b] - licznikMarek[a] || a.localeCompare(b, "pl"));
 
   // Pasek marek pokazujemy tylko, gdy jest z czego wybierać
   if (brands.length > 1) {
     const bb = document.getElementById("brandBar");
-    brands.slice(0, 12).forEach(b => {
+    brands.slice(0, 14).forEach(b => {
       const el = document.createElement("button");
       el.className = "chip"; el.dataset.b = b; el.textContent = b;
       el.onclick = () => { brandF = brandF === b ? "" : b; shown = PORCJA; render(); };
